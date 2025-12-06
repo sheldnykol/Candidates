@@ -1,0 +1,234 @@
+name: Trainee Progress Tracker (GitHub Classroom)
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    types: [closed]
+
+jobs:
+  update-progress:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Get PR Score
+        id: get_score
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number
+            });
+
+            let score = 0;
+            for (const comment of comments.data) {
+              if (comment.body.includes('Automated PR Grading Report')) {
+                const scoreMatch = comment.body.match(/Overall Score: \*\*(\d+)\/100\*\*/);
+                if (scoreMatch) {
+                  score = parseInt(scoreMatch[1]);
+                  break;
+                }
+              }
+            }
+
+            console.log(`Found score: ${score}`);
+            return score;
+
+      - name: Update Progress File
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            // Extract trainee name from repository name (GitHub Classroom style)
+            // e.g., react-training-john-doe -> john-doe
+            const trainee = context.repo.repo.replace('react-training-', '');
+            console.log(`Processing trainee: ${trainee}`);
+
+            const prTitle = '${{ github.event.pull_request.title }}';
+            const prNumber = '${{ github.event.pull_request.number }}';
+            const score = ${{ steps.get_score.outputs.result }};
+            const mergedAt = new Date().toISOString();
+
+            // Extract day from PR title (e.g., "Week 1 Day 1" -> day: 1, week: 1)
+            const weekMatch = prTitle.match(/week\s*(\d+)/i);
+            const dayMatch = prTitle.match(/day\s*(\d+)/i);
+            const week = weekMatch ? weekMatch[1] : 'unknown';
+            const day = dayMatch ? dayMatch[1] : 'unknown';
+
+            // Create progress directory if it doesn't exist
+            const progressDir = '.github/progress';
+            if (!fs.existsSync(progressDir)) {
+              fs.mkdirSync(progressDir, { recursive: true });
+            }
+
+            // Read or create trainee progress file
+            const progressFile = path.join(progressDir, `${trainee}.json`);
+            let progress = { trainee, submissions: [] };
+
+            if (fs.existsSync(progressFile)) {
+              progress = JSON.parse(fs.readFileSync(progressFile, 'utf8'));
+            }
+
+            // Add new submission
+            progress.submissions.push({
+              prNumber,
+              prTitle,
+              week,
+              day,
+              score,
+              mergedAt,
+              prUrl: `https://github.com/${context.repo.owner}/${context.repo.repo}/pull/${prNumber}`
+            });
+
+            // Calculate statistics
+            const scores = progress.submissions.map(s => s.score);
+            progress.stats = {
+              totalSubmissions: scores.length,
+              averageScore: (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1),
+              medianScore: calculateMedian(scores),
+              highestScore: Math.max(...scores),
+              lowestScore: Math.min(...scores),
+              lastUpdated: mergedAt
+            };
+
+            function calculateMedian(arr) {
+              const sorted = [...arr].sort((a, b) => a - b);
+              const mid = Math.floor(sorted.length / 2);
+              return sorted.length % 2 === 0
+                ? ((sorted[mid - 1] + sorted[mid]) / 2).toFixed(1)
+                : sorted[mid].toFixed(1);
+            }
+
+            // Write updated progress
+            fs.writeFileSync(progressFile, JSON.stringify(progress, null, 2));
+            console.log(`Updated progress for ${trainee}`);
+
+            // Return data for next step
+            return progress;
+
+      - name: Generate Progress Report
+        id: generate_report
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const trainee = context.repo.repo.replace('react-training-', '');
+            const progressFile = `.github/progress/${trainee}.json`;
+            const progress = JSON.parse(fs.readFileSync(progressFile, 'utf8'));
+
+            // Group by week
+            const byWeek = {};
+            progress.submissions.forEach(sub => {
+              const week = sub.week;
+              if (!byWeek[week]) byWeek[week] = [];
+              byWeek[week].push(sub);
+            });
+
+            let report = `# 📊 Progress Report: ${trainee}\n\n`;
+            report += `## 📈 Overall Statistics\n\n`;
+            report += `| Metric | Value |\n`;
+            report += `|--------|-------|\n`;
+            report += `| Total Submissions | ${progress.stats.totalSubmissions} |\n`;
+            report += `| Average Score | ${progress.stats.averageScore}/100 |\n`;
+            report += `| Median Score | ${progress.stats.medianScore}/100 |\n`;
+            report += `| Highest Score | ${progress.stats.highestScore}/100 |\n`;
+            report += `| Lowest Score | ${progress.stats.lowestScore}/100 |\n`;
+            report += `| Last Updated | ${new Date(progress.stats.lastUpdated).toLocaleString()} |\n\n`;
+
+            // Detailed submissions table
+            report += `## 📝 All Submissions\n\n`;
+            report += `| Week | Day | Assignment | Score | PR | Merged |\n`;
+            report += `|------|-----|------------|-------|----|---------|\n`;
+
+            progress.submissions.forEach(sub => {
+              const date = new Date(sub.mergedAt).toLocaleDateString();
+              const scoreEmoji = sub.score >= 85 ? '🌟' : sub.score >= 70 ? '✅' : sub.score >= 60 ? '⚠️' : '❌';
+              report += `| ${sub.week} | ${sub.day} | [${sub.prTitle}](${sub.prUrl}) | ${scoreEmoji} ${sub.score}/100 | [#${sub.prNumber}](${sub.prUrl}) | ${date} |\n`;
+            });
+
+            // Week summaries
+            report += `\n## 📊 Weekly Breakdown\n\n`;
+            Object.keys(byWeek).sort().forEach(week => {
+              const weekSubs = byWeek[week];
+              const weekScores = weekSubs.map(s => s.score);
+              const weekAvg = (weekScores.reduce((a, b) => a + b, 0) / weekScores.length).toFixed(1);
+              const weekMedian = calculateMedian(weekScores);
+              
+              report += `### Week ${week}\n`;
+              report += `- **Days completed:** ${weekSubs.length}\n`;
+              report += `- **Average score:** ${weekAvg}/100\n`;
+              report += `- **Median score:** ${weekMedian}/100\n`;
+              report += `- **Scores:** ${weekScores.join(', ')}\n\n`;
+            });
+
+            function calculateMedian(arr) {
+              const sorted = [...arr].sort((a, b) => a - b);
+              const mid = Math.floor(sorted.length / 2);
+              return sorted.length % 2 === 0
+                ? ((sorted[mid - 1] + sorted[mid]) / 2).toFixed(1)
+                : sorted[mid].toFixed(1);
+            }
+
+            return report;
+
+      - name: Create or Update Progress Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const trainee = context.repo.repo.replace('react-training-', '');
+            const report = ${{ steps.generate_report.outputs.result }};
+            const issueTitle = `📊 Progress Tracker: ${trainee}`;
+
+            // Find existing issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: ['progress-tracker', `trainee:${trainee}`]
+            });
+
+            if (issues.data.length > 0) {
+              // Update existing issue
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: report
+              });
+              console.log(`Updated issue #${issues.data[0].number}`);
+            } else {
+              // Create new issue
+              const newIssue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: report,
+                labels: ['progress-tracker', `trainee:${trainee}`]
+              });
+              console.log(`Created issue #${newIssue.data.number}`);
+            }
+
+      - name: Commit Progress File
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/progress/
+          git diff --staged --quiet || git commit -m "Update progress for ${GITHUB_REPOSITORY##*/}"
+          git push

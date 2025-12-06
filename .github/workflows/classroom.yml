@@ -1,0 +1,415 @@
+name: Autograding Tests
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+  pull-requests: write
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: TypeScript Compilation - Training Files
+        id: typescript-compilation
+        continue-on-error: true
+        run: |
+          echo "Running TypeScript type-check for Training-Files..."
+          # Check if Training-Files directory exists and has TypeScript files
+          if [ ! -d "src/Components/Training-Files" ]; then
+            echo "No Training-Files directory; awarding 10/10 by default"
+            echo "result=success" >> $GITHUB_OUTPUT
+            echo "score=10" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          FILES=$(find src/Components/Training-Files -name "*.tsx" -o -name "*.ts" | grep -v ".test." | wc -l)
+          if [ "$FILES" -eq 0 ]; then
+            echo "No TS files in Training-Files; awarding 10/10 by default"
+            echo "result=success" >> $GITHUB_OUTPUT
+            echo "score=10" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Use tsc with the project's tsconfig.json for proper configuration
+          # Only check files in Training-Files directory
+          echo "Running tsc --noEmit --skipLibCheck..."
+          npx tsc --noEmit --skipLibCheck 2>&1 | tee ts-output.txt
+          TSC_EXIT=${PIPESTATUS[0]}
+
+          echo "TSC exit code: $TSC_EXIT"
+          echo "Total lines in output: $(wc -l < ts-output.txt)"
+
+          # Check if there are errors specifically in Training-Files
+          echo "Checking for errors in Training-Files..."
+          if grep -q "src/Components/Training-Files" ts-output.txt; then
+            grep "src/Components/Training-Files" ts-output.txt
+            TRAINING_ERRORS=$(grep "src/Components/Training-Files" ts-output.txt | grep -c "error TS")
+          else
+            echo "(no matches)"
+            TRAINING_ERRORS=0
+          fi
+
+          echo "TypeScript errors in Training-Files: $TRAINING_ERRORS"
+
+          if [ "$TRAINING_ERRORS" -eq 0 ]; then
+            echo "✓ TypeScript check passed - no errors in Training-Files"
+            echo "result=success" >> $GITHUB_OUTPUT
+            echo "score=10" >> $GITHUB_OUTPUT
+          else
+            echo "✗ TypeScript check failed with $TRAINING_ERRORS errors in Training-Files"
+            echo "result=failure" >> $GITHUB_OUTPUT
+            echo "score=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: ESLint Check - All Source Files
+        id: eslint-check
+        continue-on-error: true
+        run: |
+          echo "Running ESLint on all src files..."
+          TARGETS=$(ls -1 src 2>/dev/null | wc -l | tr -d ' ')
+          if [ "$TARGETS" = "0" ]; then
+            echo "No src directory content; awarding 20/20 by default"
+            echo "result=success" >> $GITHUB_OUTPUT
+            echo "score=20" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          npx eslint 'src/**/*.{ts,tsx}' -f json > eslint-report.json || true
+          node -e '
+            const fs = require("fs");
+            const path = "eslint-report.json";
+            if (!fs.existsSync(path)) {
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, "result=failure\n");
+              fs.appendFileSync(process.env.GITHUB_OUTPUT, "score=0\n");
+              process.exit(0);
+            }
+            const data = JSON.parse(fs.readFileSync(path, "utf8"));
+            let countAny = 0, countConsole = 0, countMaxLines = 0;
+            let totalProblems = 0;
+            for (const file of data) {
+              for (const msg of file.messages || []) {
+                totalProblems++;
+                const rule = msg.ruleId || "";
+                if (rule === "@typescript-eslint/no-explicit-any") countAny++;
+                if (rule === "no-console") countConsole++;
+                if (rule === "max-lines-per-function") countMaxLines++;
+              }
+            }
+            // Scoring: start at 20, deduct 2 points for each category hit, up to 20 total deduction
+            let deductions = 0;
+            deductions += Math.min(countAny * 2, 10); // cap any at 10
+            deductions += Math.min(countConsole * 2, 10); // cap console at 10
+            deductions += Math.min(countMaxLines * 2, 10); // cap max-lines at 10
+            let score = Math.max(0, 20 - Math.min(deductions, 20));
+            const result = score >= 20 ? "success" : (totalProblems === 0 ? "success" : "failure");
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `score=${score}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `result=${result}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `total_problems=${totalProblems}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `eslint_any=${countAny}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `eslint_console=${countConsole}\n`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `eslint_max_lines=${countMaxLines}\n`);
+          '
+
+      - name: Run Training Exercise Tests and Calculate Score
+        id: training-tests-proportional
+        continue-on-error: true
+        run: |
+          echo "Running all tests in src folder and calculating proportional score..."
+
+          # Debug: Check current directory and structure
+          echo "Current directory: $(pwd)"
+          echo "Checking if src/ exists..."
+          ls -la src/ || echo "src/ not found"
+
+          # List all test files first for debugging
+          echo "Looking for test files in src/..."
+          find src -name "*.test.ts" -o -name "*.test.tsx" 2>&1 | head -20 || echo "find command failed"
+
+          # Run tests by explicitly listing the test files found
+          TEST_FILES=$(find src -name "*.test.ts" -o -name "*.test.tsx" 2>/dev/null | tr '\n' ' ')
+          if [ -z "$TEST_FILES" ]; then
+            echo "ERROR: No test files found in src/"
+            echo "Directory structure:"
+            find src -name "*.test.*" | head -20 || echo "No test files found anywhere in src/"
+            echo "test_score=0" >> $GITHUB_OUTPUT
+            echo "total_tests=0" >> $GITHUB_OUTPUT
+            echo "passed_tests=0" >> $GITHUB_OUTPUT
+            echo "failed_tests=0" >> $GITHUB_OUTPUT
+            echo "result=failure" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "Found test files: $TEST_FILES"
+          echo "Running vitest with these files..."
+          npm test -- --run --reporter=verbose $TEST_FILES > test-output.txt 2>&1 || true
+
+          # Display test output for debugging
+          echo "=== Test Output ==="
+          cat test-output.txt
+          echo "=================="
+
+          # Check if any test files were found
+          if grep -q "No test files found" test-output.txt; then
+            echo "ERROR: No test files found - vitest could not locate test files"
+            echo "Attempting to list test files in directory..."
+            find src/Components/Training-Files -name "*.test.*" -type f || true
+            echo "test_score=0" >> $GITHUB_OUTPUT
+            echo "total_tests=0" >> $GITHUB_OUTPUT
+            echo "passed_tests=0" >> $GITHUB_OUTPUT
+            echo "failed_tests=0" >> $GITHUB_OUTPUT
+            echo "result=failure" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Extract test results from vitest summary line
+          # Format: "      Tests  1 failed | 25 passed (26)"
+          echo "Searching for test summary..."
+          echo "Lines containing 'Tests' and 'passed':"
+          grep -E "Tests.*passed" test-output.txt || echo "(no matches)"
+
+          # Use grep with -P (Perl regex) or simpler pattern - just look for the pattern anywhere in the line
+          # Extract directly from the line containing "Tests" and numbers with "passed"
+          TEST_SUMMARY=$(grep -E "Tests.*passed.*\([0-9]+\)" test-output.txt 2>/dev/null | grep -v "⎯" | tail -1)
+
+          echo "Test summary line: '$TEST_SUMMARY'"
+
+          # Extract numbers from the summary - handle both "X failed | Y passed (Z)" and "Y passed (Z)"
+          # Look for pattern like "1 failed" or "25 passed" or "(26)"
+          FAILED_TESTS=$(echo "$TEST_SUMMARY" | grep -oE "[0-9]+ failed" | grep -oE "[0-9]+" | head -1)
+          PASSED_TESTS=$(echo "$TEST_SUMMARY" | grep -oE "[0-9]+ passed" | grep -oE "[0-9]+" | head -1)
+          TOTAL_TESTS=$(echo "$TEST_SUMMARY" | grep -oE "\([0-9]+\)" | grep -oE "[0-9]+" | head -1)
+
+          # Set defaults if empty
+          FAILED_TESTS=${FAILED_TESTS:-0}
+          PASSED_TESTS=${PASSED_TESTS:-0}
+          TOTAL_TESTS=${TOTAL_TESTS:-0}
+
+          echo "Extracted - Failed: '$FAILED_TESTS', Passed: '$PASSED_TESTS', Total: '$TOTAL_TESTS'"
+
+          # If extraction still failed, try counting checkmarks as fallback
+          if [ "$TOTAL_TESTS" -eq 0 ]; then
+            echo "Fallback: counting test result symbols..."
+            PASSED_TESTS=$(grep -c "✓" test-output.txt 2>/dev/null || echo "0")
+            FAILED_TESTS=$(grep -c "✗" test-output.txt 2>/dev/null || echo "0")
+            TOTAL_TESTS=$((PASSED_TESTS + FAILED_TESTS))
+            echo "Fallback counts - Passed: $PASSED_TESTS, Failed: $FAILED_TESTS, Total: $TOTAL_TESTS"
+          fi
+
+          echo "Total training tests: $TOTAL_TESTS"
+          echo "Passed training tests: $PASSED_TESTS"
+          echo "Failed training tests: $FAILED_TESTS"
+
+          # Calculate proportional score (out of 70 points - the biggest factor!)
+          MAX_SCORE=70
+          if [ "$TOTAL_TESTS" -gt 0 ]; then
+            SCORE=$(echo "scale=2; ($PASSED_TESTS / $TOTAL_TESTS) * $MAX_SCORE" | bc)
+            SCORE=$(printf "%.0f" $SCORE)
+          else
+            SCORE=0
+          fi
+
+          echo "Training Exercise Score: $SCORE / $MAX_SCORE"
+          echo "test_score=$SCORE" >> $GITHUB_OUTPUT
+          echo "total_tests=$TOTAL_TESTS" >> $GITHUB_OUTPUT
+          echo "passed_tests=$PASSED_TESTS" >> $GITHUB_OUTPUT
+          echo "failed_tests=$FAILED_TESTS" >> $GITHUB_OUTPUT
+          echo "result=$( [ "$TOTAL_TESTS" -gt 0 ] && echo success || echo failure )" >> $GITHUB_OUTPUT
+
+      # Note: Autograding Reporter disabled - using custom scoring with proportional tests
+      # GitHub Classroom will show results from individual test steps above
+
+      # Detailed PR Comment with Quality Score
+      - name: Generate Detailed PR Comment
+        if: github.event_name == 'pull_request'
+        run: |
+          # Build rich, standalone report with full summary per commit
+          COMMIT_SHA="${{ github.sha }}"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+
+          # Derive totals
+          TYPESCRIPT_SCORE=${{steps.typescript-compilation.outputs.score}}; TYPESCRIPT_SCORE=${TYPESCRIPT_SCORE:-0}
+          ESLINT_SCORE=${{steps.eslint-check.outputs.score}}; ESLINT_SCORE=${ESLINT_SCORE:-0}
+          TEST_SCORE="${{steps.training-tests-proportional.outputs.test_score}}"; TEST_SCORE=${TEST_SCORE:-0}
+          TOTAL_SCORE=$((TYPESCRIPT_SCORE + ESLINT_SCORE + TEST_SCORE))
+
+          PASSED="${{steps.training-tests-proportional.outputs.passed_tests}}"; PASSED=${PASSED:-0}
+          FAILED="${{steps.training-tests-proportional.outputs.failed_tests}}"; FAILED=${FAILED:-0}
+          TOTAL="${{steps.training-tests-proportional.outputs.total_tests}}"; TOTAL=${TOTAL:-0}
+
+          echo "# ⚠️ Automated PR Grading Report" > pr-comment.md
+          echo "" >> pr-comment.md
+          echo "## 📊 Overall Score: ${TOTAL_SCORE}/100" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo "**Submitted:** ${TIMESTAMP}" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo "## ✅ Quality Checks" >> pr-comment.md
+          echo "" >> pr-comment.md
+          echo "| Check | Status | Points | Details |" >> pr-comment.md
+          echo "|---|---|---|---|" >> pr-comment.md
+          if [ "$TYPESCRIPT_SCORE" -eq 10 ]; then echo "| TypeScript (Training Files) | ✅ Pass | 10/10 | No type errors |" >> pr-comment.md; else echo "| TypeScript (Training Files) | ❌ Fail | 0/10 | Type errors present |" >> pr-comment.md; fi
+
+          # ESLint with detailed breakdown
+          ESLINT_ANY=${{steps.eslint-check.outputs.eslint_any}}; ESLINT_ANY=${ESLINT_ANY:-0}
+          ESLINT_CONSOLE=${{steps.eslint-check.outputs.eslint_console}}; ESLINT_CONSOLE=${ESLINT_CONSOLE:-0}
+          ESLINT_MAXLINES=${{steps.eslint-check.outputs.eslint_max_lines}}; ESLINT_MAXLINES=${ESLINT_MAXLINES:-0}
+          ESLINT_DETAILS=""
+          if [ "$ESLINT_ANY" -gt 0 ]; then ESLINT_DETAILS="${ESLINT_DETAILS}any: $ESLINT_ANY "; fi
+          if [ "$ESLINT_CONSOLE" -gt 0 ]; then ESLINT_DETAILS="${ESLINT_DETAILS}console: $ESLINT_CONSOLE "; fi
+          if [ "$ESLINT_MAXLINES" -gt 0 ]; then ESLINT_DETAILS="${ESLINT_DETAILS}max-lines: $ESLINT_MAXLINES"; fi
+          ESLINT_DETAILS=${ESLINT_DETAILS:- Clean code}
+
+          if [ "$ESLINT_SCORE" -eq 20 ]; then 
+            echo "| ESLint Code Quality (All Source Files) | ✅ Pass | ${ESLINT_SCORE}/20 | ${ESLINT_DETAILS} |" >> pr-comment.md
+          else 
+            echo "| ESLint Code Quality (All Source Files) | ⚠️ Partial | ${ESLINT_SCORE}/20 | ${ESLINT_DETAILS} |" >> pr-comment.md
+          fi
+
+          # Tests row
+          if [ "$TOTAL" -gt 0 ]; then
+            if [ "$FAILED" -gt 0 ]; then
+              echo "| Training Exercise Tests | ⚠️ Partial | ${TEST_SCORE}/70 | $PASSED passed, $FAILED failed (of $TOTAL) |" >> pr-comment.md
+            else
+              echo "| Training Exercise Tests | ✅ Pass | ${TEST_SCORE}/70 | All $TOTAL tests passed |" >> pr-comment.md
+            fi
+          else
+            echo "| Training Exercise Tests | ⚠️ None | 0/70 | No tests found in Training-Files |" >> pr-comment.md
+          fi
+
+          echo "" >> pr-comment.md
+          echo "## 📈 Detailed Feedback" >> pr-comment.md
+          if [ "$TYPESCRIPT_SCORE" -eq 10 ]; then echo "- ✅ TypeScript: No type errors detected." >> pr-comment.md; else echo "- ❌ TypeScript: Please fix reported type errors." >> pr-comment.md; fi
+
+          ESLINT_TOTAL="${{steps.eslint-check.outputs.total_problems}}"; ESLINT_TOTAL=${ESLINT_TOTAL:-0}
+          if [ "$ESLINT_SCORE" -eq 30 ]; then 
+            echo "- ✅ ESLint: Code quality excellent (0 issues)." >> pr-comment.md
+          else 
+            echo "- ⚠️ ESLint: Found $ESLINT_TOTAL code quality issues in Training-Files (any: $ESLINT_ANY, console: $ESLINT_CONSOLE, max-lines: $ESLINT_MAXLINES)." >> pr-comment.md
+          fi
+          if [ "$TOTAL" -gt 0 ]; then echo "- 🧪 Tests: $PASSED passed, $FAILED failed (of $TOTAL)." >> pr-comment.md; else echo "- 🧪 Tests: No Training-Files tests found." >> pr-comment.md; fi
+          if [ "$COVERAGE_SCORE" -lt 10 ]; then echo "- 📊 Coverage: Aim for >60% in Training-Files." >> pr-comment.md; fi
+          if [ "$CONSOLE_SCORE" -lt 10 ]; then echo "- 🔍 Console: Remove console statements from Training-Files." >> pr-comment.md; fi
+
+          echo "" >> pr-comment.md
+          echo "---" >> pr-comment.md
+          echo "*Commit:* \`$COMMIT_SHA\` • *Run:* [$RUN_URL]($RUN_URL)" >> pr-comment.md
+          echo "" >> pr-comment.md
+
+          # Add quality recommendations
+          echo "## 💡 Code Quality Tips" >> pr-comment.md
+          echo "" >> pr-comment.md
+
+          if [ "${{steps.no-console-statements.outputs.result}}" != "success" ]; then
+            echo "- 🔍 **Console Statements:** Remove console.log/warn/error from your Training Files exercises" >> pr-comment.md
+          fi
+
+          COVERAGE_SCORE="${{steps.code-coverage.outputs.coverage_score}}"
+          if [ -z "$COVERAGE_SCORE" ] || [ "$COVERAGE_SCORE" -lt 10 ]; then
+            echo "- 📊 **Coverage:** Aim for >60% test coverage in your Training Files exercises" >> pr-comment.md
+          fi
+
+          echo "" >> pr-comment.md
+          echo "### 📝 Note" >> pr-comment.md
+          echo "Grading focuses on **Training-Files** exercises only. Complete more exercises to increase your score!" >> pr-comment.md
+
+          echo "" >> pr-comment.md
+          echo "---" >> pr-comment.md
+          echo "*📅 Commit: \`${{ github.sha }}\` | Run: [#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})*" >> pr-comment.md
+
+          echo "PR comment generated:"
+          cat pr-comment.md
+
+      - name: Post PR Comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const comment = fs.readFileSync('pr-comment.md', 'utf8');
+            console.log('Posting new comment to PR (preserving history)...');
+            // Always create a new comment to preserve history
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: comment
+            });
+
+            console.log('Comment posted successfully!');
+
+      - name: Autograding Summary
+        if: always()
+        run: |
+          echo "========================================"
+          echo "📊 AUTOGRADING SUMMARY"
+          echo "========================================"
+
+          # Calculate total score
+          TYPESCRIPT_SCORE=0
+          ESLINT_SCORE=0
+          TEST_SCORE=0
+          COVERAGE_SCORE=0
+          CONSOLE_SCORE=0
+
+          if [ "${{steps.typescript-compilation.outputs.result}}" == "success" ]; then
+            TYPESCRIPT_SCORE=10
+          fi
+
+          if [ "${{steps.eslint-check.outputs.result}}" == "success" ]; then
+            ESLINT_SCORE=10
+          fi
+
+          TEST_SCORE=${{steps.training-tests-proportional.outputs.test_score}}
+          TEST_SCORE=${TEST_SCORE:-0}
+
+          COVERAGE_SCORE=${{steps.code-coverage.outputs.coverage_score}}
+          COVERAGE_SCORE=${COVERAGE_SCORE:-0}
+
+          CONSOLE_SCORE=${{steps.no-console-statements.outputs.score}}; CONSOLE_SCORE=${CONSOLE_SCORE:-0}
+
+          TOTAL_SCORE=$((TYPESCRIPT_SCORE + ESLINT_SCORE + TEST_SCORE + COVERAGE_SCORE + CONSOLE_SCORE))
+
+          echo "TypeScript:        $TYPESCRIPT_SCORE/10"
+          echo "ESLint:            $ESLINT_SCORE/20"
+          echo "Training Tests:    $TEST_SCORE/70"
+          echo "Coverage:          $COVERAGE_SCORE/10"
+          echo "No Console:        $CONSOLE_SCORE/10"
+          echo "----------------------------------------"
+          echo "TOTAL SCORE:       $TOTAL_SCORE/100"
+          echo "========================================"
+
+          # Tests summary
+          TOTAL_TESTS=${{steps.training-tests-proportional.outputs.total_tests}}
+          PASSED_TESTS=${{steps.training-tests-proportional.outputs.passed_tests}}
+          FAILED_TESTS=${{steps.training-tests-proportional.outputs.failed_tests}}
+
+          echo ""
+          echo "📝 Test Details:"
+          echo "   Total:  ${TOTAL_TESTS:-0} tests"
+          echo "   Passed: ${PASSED_TESTS:-0} tests"
+          echo "   Failed: ${FAILED_TESTS:-0} tests"
+
+          # This step always succeeds to prevent "All checks failed" message
+          exit 0

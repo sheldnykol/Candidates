@@ -1,0 +1,67 @@
+[
+  {
+    "name": "score:excellent",
+    "color": "0e8a16",
+    "description": "Score >= 85/100"
+  },
+  {
+    "name": "score:good",
+    "color": "fbca04",
+    "description": "Score 70-84/100"
+  },
+  {
+    "name": "score:passing",
+    "color": "d93f0b",
+    "description": "Score 60-69/100"
+  },
+  {
+    "name": "score:failing",
+    "color": "b60205",
+    "description": "Score < 60/100"
+  },
+  {
+    "name": "status:typescript-errors",
+    "color": "d93f0b",
+    "description": "TypeScript compilation errors"
+  },
+  {
+    "name": "status:build-failed",
+    "color": "b60205",
+    "description": "Build process failed"
+  },
+  {
+    "name": "ready-for-review",
+    "color": "0e8a16",
+    "description": "All quality gates passed"
+  },
+  {
+    "name": "needs-work",
+    "color": "fbca04",
+    "description": "Quality issues need to be addressed"
+  },
+  {
+    "name": "week-1",
+    "color": "c5def5",
+    "description": "Week 1 assignments"
+  },
+  {
+    "name": "week-2",
+    "color": "bfdadc",
+    "description": "Week 2 assignments"
+  },
+  {
+    "name": "daily-report",
+    "color": "5319e7",
+    "description": "Automated daily progress report"
+  },
+  {
+    "name": "automated",
+    "color": "ededed",
+    "description": "Created by automation"
+  },
+  {
+    "name": "progress-tracker",
+    "color": "0075ca",
+    "description": "Individual trainee progress tracking"
+  }
+]

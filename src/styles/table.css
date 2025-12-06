@@ -1,0 +1,62 @@
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+}
+
+.candidate-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.candidate-table th {
+  background: #34495e;
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: bold;
+}
+
+.candidate-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.candidate-table tr {
+  transition: background 0.2s;
+}
+
+.status-badge {
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.status-approved {
+  background: #27ae60;
+}
+
+.status-pending {
+  background: #f39c12;
+}
+
+.status-rejected {
+  background: #e74c3c;
+}
+
+.status-on-hold {
+  background: #95a5a6;
+}
+
+.empty-state {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  text-align: center;
+  color: #95a5a6;
+}

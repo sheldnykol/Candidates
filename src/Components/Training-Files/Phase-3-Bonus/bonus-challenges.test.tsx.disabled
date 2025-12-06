@@ -1,0 +1,593 @@
+/**
+ * BONUS CHALLENGES TEST SUITE
+ * 
+ * This file tests all bonus challenge implementations.
+ * Rename to .test.tsx when you start working on bonus challenges.
+ * 
+ * To enable: 
+ * mv bonus-challenges.test.tsx.disabled bonus-challenges.test.tsx
+ * 
+ * Total Points: 91
+ */
+
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import { CandidateProvider } from "../../../context/CandidateProvider";
+
+// ============================================================================
+// CHALLENGE 1: Advanced Pagination (10 points)
+// ============================================================================
+
+describe("Challenge 1: Advanced Pagination (10 points)", () => {
+  describe("URL Query Parameters (5 points)", () => {
+    it("should persist page number in URL query params", () => {
+      // Test that page changes update URL with ?page=2
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should read page from URL on mount", () => {
+      // Test that component reads ?page=3 from URL
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should work with browser back/forward buttons", () => {
+      // Test that browser navigation updates page correctly
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Items Per Page Selector (5 points)", () => {
+    it("should render page size dropdown with options 5, 10, 25, 50", () => {
+      // Test that dropdown exists with correct options
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should change displayed items when page size changes", () => {
+      // Test that selecting 10 shows 10 items
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should persist page size preference in localStorage", () => {
+      // Test localStorage.setItem and getItem
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 2: Dark Mode Theme Toggle (8 points)
+// ============================================================================
+
+describe("Challenge 2: Dark Mode Theme Toggle (8 points)", () => {
+  beforeEach(() => {
+    localStorage.clear();
+    document.documentElement.removeAttribute("data-theme");
+  });
+
+  describe("Theme Toggle Button (3 points)", () => {
+    it("should render theme toggle button in header/navbar", () => {
+      // Test button exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should toggle between light and dark mode on click", () => {
+      // Test that clicking changes theme
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show correct icon for current theme", () => {
+      // Test sun/moon icon display
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Theme Persistence (5 points)", () => {
+    it("should save theme preference to localStorage", () => {
+      // Test localStorage.setItem('theme', 'dark')
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should apply saved theme on initial load", () => {
+      // Test that saved theme is applied on mount
+      localStorage.setItem("theme", "dark");
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should apply data-theme attribute to document element", () => {
+      // Test document.documentElement.getAttribute('data-theme')
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 3: Export to CSV (7 points)
+// ============================================================================
+
+describe("Challenge 3: Export to CSV (7 points)", () => {
+  describe("Export Button (2 points)", () => {
+    it("should render 'Export to CSV' button in list header", () => {
+      // Test button exists in CandidateListPage
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("CSV Generation (3 points)", () => {
+    it("should generate CSV with all candidate fields", () => {
+      // Test CSV includes name, email, position, status, etc.
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should properly format skills array (semicolon separated)", () => {
+      // Test skills: ['React', 'TypeScript'] becomes 'React;TypeScript'
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should escape special characters in CSV", () => {
+      // Test that commas, quotes are properly escaped
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Download Trigger (2 points)", () => {
+    it("should trigger download with correct filename format", () => {
+      // Test filename: candidates_YYYY-MM-DD.csv
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should create Blob with correct MIME type", () => {
+      // Test Blob type is 'text/csv'
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 4: Advanced Search & Filters (10 points)
+// ============================================================================
+
+describe("Challenge 4: Advanced Search & Filters (10 points)", () => {
+  describe("Multi-field Search (3 points)", () => {
+    it("should search across multiple fields (name, email, position, skills, location)", () => {
+      // Test search finds matches in any field
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show 'No results' message when no matches", () => {
+      // Test empty state with message
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Multiple Filters (4 points)", () => {
+    it("should filter by multiple statuses using checkboxes", () => {
+      // Test selecting approved + pending shows both
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should filter by experience range (min/max)", () => {
+      // Test experience between 2-5 years
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should filter by salary range (min/max)", () => {
+      // Test salary between 50k-100k
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should have 'Clear all filters' button that resets everything", () => {
+      // Test clear button removes all filters
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Filter Chips (3 points)", () => {
+    it("should display active filters as removable chips", () => {
+      // Test chips appear for active filters
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should remove filter when chip is clicked", () => {
+      // Test clicking chip removes that filter
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show count of filtered results", () => {
+      // Test 'Showing 5 of 20 candidates' message
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 5: Toast Notifications (6 points)
+// ============================================================================
+
+describe("Challenge 5: Toast Notifications (6 points)", () => {
+  describe("Toast System (2 points)", () => {
+    it("should have ToastProvider/Context", () => {
+      // Test context exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should support different toast types (success, error, warning, info)", () => {
+      // Test different type styling
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Action Feedback (2 points)", () => {
+    it("should show success toast when candidate is added", () => {
+      // Test toast appears after add
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show success toast when candidate is updated", () => {
+      // Test toast appears after update
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show success toast when candidate is deleted", () => {
+      // Test toast appears after delete
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show error toast on API failures", () => {
+      // Test error toast on failed request
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Toast Behavior (2 points)", () => {
+    it("should auto-dismiss after 3-5 seconds", async () => {
+      // Test toast disappears automatically
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should allow manual dismiss", () => {
+      // Test close button works
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should stack multiple toasts", () => {
+      // Test multiple toasts display together
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 6: Responsive Mobile Menu (5 points)
+// ============================================================================
+
+describe("Challenge 6: Responsive Mobile Menu (5 points)", () => {
+  describe("Hamburger Menu (2 points)", () => {
+    it("should show hamburger icon on mobile screens", () => {
+      // Test icon appears when viewport < 768px
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should hide full navigation on mobile", () => {
+      // Test nav is hidden on small screens
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should toggle menu on hamburger click", () => {
+      // Test menu opens/closes
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Mobile Menu Behavior (3 points)", () => {
+    it("should slide in with animation", () => {
+      // Test menu has transition/animation
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should close on route change", () => {
+      // Test menu closes when navigating
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should close on outside click", () => {
+      // Test clicking overlay closes menu
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should have overlay behind menu", () => {
+      // Test backdrop/overlay exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 7: Candidate Avatar & Image Upload (12 points)
+// ============================================================================
+
+describe("Challenge 7: Candidate Avatar & Image Upload (12 points)", () => {
+  describe("Image Upload (4 points)", () => {
+    it("should have image upload field in candidate form", () => {
+      // Test file input exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show preview before upload", () => {
+      // Test image preview displays
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate file type (jpg, png only)", () => {
+      // Test rejection of invalid file types
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate file size (< 2MB)", () => {
+      // Test rejection of large files
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should support drag & drop", () => {
+      // Test drag and drop functionality
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Image Display (4 points)", () => {
+    it("should show avatar in candidate table", () => {
+      // Test small avatar in table row
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show larger image in detail view", () => {
+      // Test full image in detail page
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show default avatar for candidates without image", () => {
+      // Test fallback avatar
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should use initials as fallback", () => {
+      // Test 'JD' for John Doe
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Image Storage (4 points)", () => {
+    it("should store image data with candidate", () => {
+      // Test image persists with candidate data
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should handle loading states during upload", () => {
+      // Test loading spinner/indicator
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 8: Dashboard Charts (10 points)
+// ============================================================================
+
+describe("Challenge 8: Dashboard Charts (10 points)", () => {
+  describe("Chart Rendering (4 points)", () => {
+    it("should render pie chart for status distribution", () => {
+      // Test pie chart exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should render bar chart for candidates by position", () => {
+      // Test bar chart exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should render line chart for applications over time", () => {
+      // Test line chart exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should render histogram for salary distribution", () => {
+      // Test histogram exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Chart Interactivity (3 points)", () => {
+    it("should show values on hover", () => {
+      // Test tooltip appears
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should be responsive on all screen sizes", () => {
+      // Test charts resize
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Data Updates (3 points)", () => {
+    it("should update charts when candidate data changes", () => {
+      // Test charts re-render with new data
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should handle loading states", () => {
+      // Test loading indicators
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should handle empty data gracefully", () => {
+      // Test charts with no data
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 9: Form Validation Enhancement (8 points)
+// ============================================================================
+
+describe("Challenge 9: Form Validation Enhancement (8 points)", () => {
+  describe("Real-time Validation (3 points)", () => {
+    it("should validate on blur, not on every keystroke", () => {
+      // Test validation triggers on blur
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show checkmark for valid fields", () => {
+      // Test success icon appears
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should show error icon for invalid fields", () => {
+      // Test error icon appears
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Enhanced Validations (5 points)", () => {
+    it("should validate phone number format", () => {
+      // Test phone regex validation
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate email domain", () => {
+      // Test email domain check
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate skills are comma-separated", () => {
+      // Test skills format validation
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate interview date is after applied date", () => {
+      // Test date comparison
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should validate salary ranges by position", () => {
+      // Test salary appropriate for position
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// CHALLENGE 10: Undo/Redo Functionality (15 points) [EXPERT]
+// ============================================================================
+
+describe("Challenge 10: Undo/Redo Functionality (15 points)", () => {
+  describe("Action History (5 points)", () => {
+    it("should track create operations", () => {
+      // Test history stores create action
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should track update operations", () => {
+      // Test history stores update action
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should track delete operations", () => {
+      // Test history stores delete action
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should limit history to 20 actions", () => {
+      // Test max history size
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should store previous state for undo", () => {
+      // Test previousState is saved
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Undo/Redo Buttons (5 points)", () => {
+    it("should render undo button", () => {
+      // Test undo button exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should render redo button", () => {
+      // Test redo button exists
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should disable undo when no actions available", () => {
+      // Test disabled state
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should disable redo when at latest action", () => {
+      // Test disabled state
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should support keyboard shortcuts (Ctrl+Z, Ctrl+Y)", () => {
+      // Test keyboard shortcuts work
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+
+  describe("Undo/Redo Operations (5 points)", () => {
+    it("should undo create by deleting candidate", () => {
+      // Test undo create removes candidate
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should undo update by restoring previous state", () => {
+      // Test undo update reverts changes
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should undo delete by restoring candidate", () => {
+      // Test undo delete brings back candidate
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should redo previously undone action", () => {
+      // Test redo re-applies action
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should handle multiple undo/redo operations", () => {
+      // Test sequence of undo/redo
+      expect(true).toBe(false); // Replace with actual test
+    });
+
+    it("should keep API in sync with local state", () => {
+      // Test API calls are made correctly
+      expect(true).toBe(false); // Replace with actual test
+    });
+  });
+});
+
+// ============================================================================
+// SCORING SUMMARY
+// ============================================================================
+
+/*
+ * BONUS CHALLENGES SCORING:
+ * 
+ * Challenge 1:  10 points - Advanced Pagination
+ * Challenge 2:   8 points - Dark Mode Theme Toggle
+ * Challenge 3:   7 points - Export to CSV
+ * Challenge 4:  10 points - Advanced Search & Filters
+ * Challenge 5:   6 points - Toast Notifications
+ * Challenge 6:   5 points - Responsive Mobile Menu
+ * Challenge 7:  12 points - Candidate Avatar & Image Upload
+ * Challenge 8:  10 points - Dashboard Charts
+ * Challenge 9:   8 points - Form Validation Enhancement
+ * Challenge 10: 15 points - Undo/Redo Functionality
+ * 
+ * TOTAL: 91 points
+ * 
+ * Replace expect(true).toBe(false) with actual test implementations
+ * as you complete each bonus challenge.
+ */

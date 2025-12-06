@@ -1,0 +1,40 @@
+{
+  "trainee": "template",
+  "submissions": [
+    {
+      "prNumber": "7",
+      "prTitle": "Grading test 4",
+      "week": "unknown",
+      "day": "unknown",
+      "score": 0,
+      "mergedAt": "2025-12-04T10:40:58.877Z",
+      "prUrl": "https://github.com/vatsilidis/react-training-template/pull/7"
+    },
+    {
+      "prNumber": "8",
+      "prTitle": "Grading test 5 no no console",
+      "week": "unknown",
+      "day": "unknown",
+      "score": 0,
+      "mergedAt": "2025-12-04T10:41:01.210Z",
+      "prUrl": "https://github.com/vatsilidis/react-training-template/pull/8"
+    },
+    {
+      "prNumber": "18",
+      "prTitle": "preparing final template",
+      "week": "unknown",
+      "day": "unknown",
+      "score": 0,
+      "mergedAt": "2025-12-04T15:21:53.812Z",
+      "prUrl": "https://github.com/vatsilidis/react-training-template/pull/18"
+    }
+  ],
+  "stats": {
+    "totalSubmissions": 3,
+    "averageScore": "0.0",
+    "medianScore": "0.0",
+    "highestScore": 0,
+    "lowestScore": 0,
+    "lastUpdated": "2025-12-04T15:21:53.812Z"
+  }
+}

@@ -1,0 +1,10 @@
+Environment Check Report
+Date: Tue Dec  2 13:49:16 EET 2025
+========================================
+
+Node.js: v24.11.1
+npm: v11.6.2
+nvm: v0.39.1
+Git: v2.23.0
+OS: Darwin 25.1.0
+Shell: /bin/bash

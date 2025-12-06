@@ -1,0 +1,54 @@
+{
+  "tests": [
+    {
+      "name": "TypeScript Compilation - Training Files",
+      "setup": "npm ci",
+      "run": "npx tsc --noEmit --skipLibCheck src/Components/Training-Files/**/*.tsx src/Components/Training-Files/**/*.ts 2>&1 || exit 0",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "ESLint Check - Training Files",
+      "setup": "",
+      "run": "npx eslint 'src/Components/Training-Files/**/*.{ts,tsx}' --max-warnings 10",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 10
+    },
+    {
+      "name": "Training Exercise Tests",
+      "setup": "",
+      "run": "npm test -- --run 'src/Components/Training-Files'",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 15,
+      "points": 60
+    },
+    {
+      "name": "Code Coverage - Training Files",
+      "setup": "",
+      "run": "npx vitest --run --coverage --coverage.include='src/Components/Training-Files/**/*.tsx' --coverage.include='src/Components/Training-Files/**/*.ts' --coverage.exclude='**/*.test.*' && node -e \"const fs = require('fs'); if (!fs.existsSync('./coverage/coverage-summary.json')) { console.log('Coverage file not found'); process.exit(0); } const coverage = require('./coverage/coverage-summary.json'); const trainingFiles = Object.keys(coverage).filter(k => k.includes('Training-Files') && !k.includes('.test.')); if (trainingFiles.length === 0) { console.log('No training files found in coverage'); process.exit(0); } let totalLines = 0, coveredLines = 0; trainingFiles.forEach(f => { if (coverage[f] && coverage[f].lines) { totalLines += coverage[f].lines.total; coveredLines += coverage[f].lines.covered; } }); const pct = totalLines > 0 ? (coveredLines / totalLines) * 100 : 0; console.log('Training Files Coverage: ' + pct.toFixed(2) + '%'); if (pct < 60) { process.exit(1); }\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 15,
+      "points": 10
+    },
+    {
+      "name": "No Console Statements - Training Files",
+      "setup": "",
+      "run": "CONSOLE_COUNT=$(grep -r \"console\\.\" src/Components/Training-Files --include=\"*.tsx\" --include=\"*.ts\" --exclude=\"*.test.*\" 2>/dev/null | grep -v \"catch\" | wc -l | tr -d ' ' || echo \"0\") && if [ \"$CONSOLE_COUNT\" -gt 0 ]; then echo \"Found $CONSOLE_COUNT console statements in Training Files\"; exit 1; fi && echo \"No console statements found\"",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 5,
+      "points": 10
+    }
+  ]
+}

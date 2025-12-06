@@ -1,0 +1,303 @@
+{
+  "candidates": [
+    {
+      "id": 1,
+      "name": "Sarah Johnson",
+      "email": "sarah.johnson@email.com",
+      "phone": "+1-555-0101",
+      "position": "Senior Frontend Developer",
+      "status": "approved",
+      "skills": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Node.js"
+      ],
+      "experience": 5,
+      "rating": 4.5,
+      "appliedDate": "2024-10-15",
+      "interviewDate": "2024-10-20",
+      "notes": "Excellent technical skills and communication",
+      "yearlySalary": 95000,
+      "location": "San Francisco, CA",
+      "education": "BS Computer Science"
+    },
+    {
+      "id": 2,
+      "name": "Michael Chen",
+      "email": "michael.chen@email.com",
+      "phone": "+1-555-0102",
+      "position": "Full Stack Developer",
+      "status": "pending",
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL"
+      ],
+      "experience": 3,
+      "rating": 4,
+      "appliedDate": "2024-11-01",
+      "interviewDate": null,
+      "notes": "Strong backend experience, waiting for technical interview",
+      "yearlySalary": 80000,
+      "location": "New York, NY",
+      "education": "MS Software Engineering"
+    },
+    {
+      "id": 3,
+      "name": "Emily Rodriguez",
+      "email": "emily.rodriguez@email.com",
+      "phone": "+1-555-0103",
+      "position": "UI/UX Designer",
+      "status": "on-hold",
+      "skills": [
+        "Figma",
+        "Adobe XD",
+        "CSS",
+        "HTML"
+      ],
+      "experience": 4,
+      "rating": 4.2,
+      "appliedDate": "2024-10-25",
+      "interviewDate": "2024-10-28",
+      "notes": "Great portfolio, but needs approval from design lead",
+      "yearlySalary": 75000,
+      "location": "Austin, TX",
+      "education": "BA Graphic Design"
+    },
+    {
+      "id": 4,
+      "name": "David Kim",
+      "email": "david.kim@email.com",
+      "phone": "+1-555-0104",
+      "position": "DevOps Engineer",
+      "status": "approved",
+      "skills": [
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "CI/CD"
+      ],
+      "experience": 6,
+      "rating": 4.8,
+      "appliedDate": "2024-10-10",
+      "interviewDate": "2024-10-18",
+      "notes": "Exceptional DevOps skills, strong cultural fit",
+      "yearlySalary": 105000,
+      "location": "Seattle, WA",
+      "education": "BS Information Technology"
+    },
+    {
+      "id": 5,
+      "name": "Jessica Williams",
+      "email": "jessica.williams@email.com",
+      "phone": "+1-555-0105",
+      "position": "Junior Developer",
+      "status": "rejected",
+      "skills": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "experience": 1,
+      "rating": 2.5,
+      "appliedDate": "2024-10-30",
+      "interviewDate": "2024-11-02",
+      "notes": "Lacks required experience for the role",
+      "yearlySalary": 55000,
+      "location": "Boston, MA",
+      "education": "BS Computer Science"
+    },
+    {
+      "id": "852b",
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "+1-555-9999",
+      "position": "Test Developer",
+      "status": "pending",
+      "skills": [
+        "Testing"
+      ],
+      "experience": 3,
+      "rating": 4,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test candidate",
+      "yearlySalary": 75000,
+      "location": "Test City",
+      "education": "BS Test"
+    },
+    {
+      "id": "9724",
+      "name": "Test 1",
+      "email": "test1@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    },
+    {
+      "id": "1256",
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "+1-555-9999",
+      "position": "Test Developer",
+      "status": "pending",
+      "skills": [
+        "Testing"
+      ],
+      "experience": 3,
+      "rating": 4,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test candidate",
+      "yearlySalary": 75000,
+      "location": "Test City",
+      "education": "BS Test"
+    },
+    {
+      "id": "9ff8",
+      "name": "Test 1",
+      "email": "test1@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    },
+    {
+      "id": "89ff",
+      "name": "Test 2",
+      "email": "test2@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    },
+    {
+      "id": "ba3e",
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "+1-555-9999",
+      "position": "Test Developer",
+      "status": "pending",
+      "skills": [
+        "Testing"
+      ],
+      "experience": 3,
+      "rating": 4,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test candidate",
+      "yearlySalary": 75000,
+      "location": "Test City",
+      "education": "BS Test"
+    },
+    {
+      "id": "f30c",
+      "name": "Test 1",
+      "email": "test1@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    },
+    {
+      "id": "49b3",
+      "name": "Test User",
+      "email": "test@example.com",
+      "phone": "+1-555-9999",
+      "position": "Test Developer",
+      "status": "pending",
+      "skills": [
+        "Testing"
+      ],
+      "experience": 3,
+      "rating": 4,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test candidate",
+      "yearlySalary": 75000,
+      "location": "Test City",
+      "education": "BS Test"
+    },
+    {
+      "id": "4eb4",
+      "name": "Test 1",
+      "email": "test1@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    },
+    {
+      "id": "efd1",
+      "name": "Test 2",
+      "email": "test2@example.com",
+      "phone": "+1-555-1111",
+      "position": "Developer 1",
+      "status": "pending",
+      "skills": [
+        "Skill1"
+      ],
+      "experience": 1,
+      "rating": 3.5,
+      "appliedDate": "2024-11-19",
+      "interviewDate": null,
+      "notes": "Test 1",
+      "yearlySalary": 60000,
+      "location": "City 1",
+      "education": "BS 1"
+    }
+  ]
+}

@@ -1,0 +1,615 @@
+name: PR Quality Check & Grading
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    types: [opened, synchronize, reopened]
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript Compilation Check
+        id: typescript
+        run: |
+          echo "Running TypeScript compilation check..."
+          if npx tsc --noEmit 2>&1 | tee typescript-output.txt; then
+            echo "✅ TypeScript compilation successful"
+            echo "ts_failed=false" >> $GITHUB_OUTPUT
+          else
+            echo "TypeScript errors found"
+            cat typescript-output.txt
+            echo "ts_failed=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: ESLint Check
+        id: eslint
+        run: |
+          echo "Running ESLint on src/ folder..."
+          if npx eslint src/ 2>&1 | tee eslint-output.txt; then
+            if grep -qi "error" eslint-output.txt; then
+              echo "ESLint errors found"
+              echo "lint_failed=true" >> $GITHUB_OUTPUT
+            else
+              echo "✅ ESLint check passed"
+              echo "lint_failed=false" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "ESLint errors found"
+            cat eslint-output.txt
+            echo "lint_failed=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Build Check
+        id: build
+        run: |
+          echo "Running build..."
+          if npm run build 2>&1 | tee build-output.txt; then
+            echo "✅ Build successful"
+            echo "build_failed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Build failed"
+            cat build-output.txt
+            echo "build_failed=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Run Tests with Coverage
+        id: tests
+        run: |
+          echo "Running tests with coverage..."
+          if npm run test:coverage 2>&1 | tee test-output.txt; then
+            echo "✅ Tests passed"
+            echo "tests_failed=false" >> $GITHUB_OUTPUT
+          else
+            echo "Tests failed"
+            cat test-output.txt
+            echo "tests_failed=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Extract Coverage Percentage
+        id: coverage
+        run: |
+          if [ -f coverage/coverage-summary.json ]; then
+            COVERAGE=$(node -e "const coverage = require('./coverage/coverage-summary.json'); console.log(coverage.total.lines.pct);")
+            echo "coverage_pct=$COVERAGE" >> $GITHUB_OUTPUT
+            echo "Coverage: $COVERAGE%"
+          else
+            echo "coverage_pct=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check for Console Statements
+        id: console
+        run: |
+          echo "Checking for console statements in student code..."
+          # Check all of src/, exclude instructor files and tests
+          # Allow console in catch blocks for error handling
+          ANALYZE_DIRS="src"
+          EXCLUDE_PATTERN="--exclude-dir=__tests__ --exclude-dir=test --exclude-dir=Training-Files"
+
+          # Count console statements but exclude those in catch blocks (error handlers)
+          ALL_CONSOLE=$(grep -r "console\." $ANALYZE_DIRS --include="*.tsx" --include="*.ts" --exclude="*.test.*" --exclude="App.tsx" --exclude="main.tsx" $EXCLUDE_PATTERN 2>/dev/null || echo "")
+
+          # Filter out console statements that are within catch blocks
+          CONSOLE_COUNT=0
+          if [ -n "$ALL_CONSOLE" ]; then
+            # Simple heuristic: exclude lines with catch in context
+            CONSOLE_COUNT=$(echo "$ALL_CONSOLE" | grep -v "catch" | wc -l || echo "0")
+          fi
+
+          echo "console_count=$CONSOLE_COUNT" >> $GITHUB_OUTPUT
+          if [ "$CONSOLE_COUNT" -gt 0 ]; then
+            echo "⚠️  Found $CONSOLE_COUNT console statements (excluding error handlers)"
+            echo "$ALL_CONSOLE" | grep -v "catch" || true
+          else
+            echo "✅ No problematic console statements found"
+          fi
+
+      - name: Advanced Code Smell Detection
+        id: code_smells
+        run: |
+          echo "🔍 Running comprehensive code smell analysis..."
+
+          # Run the comprehensive code smell analysis script
+          chmod +x scripts/analyze-code-smells.sh
+          scripts/analyze-code-smells.sh || true
+
+          echo ""
+          echo "📊 Extracting metrics for GitHub..."
+
+          # Define directories to analyze (all of src/) and exclusions
+          ANALYZE_DIRS="src"
+          EXCLUDE_PATTERN="--exclude-dir=__tests__ --exclude-dir=test --exclude-dir=test_old --exclude-dir=Training-Files"
+          EXCLUDE_FILES="--exclude=App.tsx --exclude=main.tsx --exclude=index.css --exclude=App.css --exclude=vite-env.d.ts"
+
+          # Extract individual metrics for GitHub Actions (only from student work)
+          DEBUGGER_COUNT=$(grep -r "debugger" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN --exclude="*.test.*" 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+          TODO_COUNT=$(grep -ri "TODO\|FIXME\|HACK\|XXX" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | grep -v "TODO: Build\|TODO for students\|TODO - students\|INSTRUCTOR TODO" | wc -l | tr -d ' ' || echo 0)
+          ANY_COUNT=$(grep -r ": any\|<any>" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN --exclude="*.test.*" 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+          TS_IGNORE_COUNT=$(grep -r "@ts-ignore\|@ts-expect-error" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+
+          # Count large files only in student directories
+          LARGE_FILES=0
+          for dir in $ANALYZE_DIRS; do
+            if [ -d "$dir" ]; then
+              COUNT=$(find $dir \( -name "*.ts" -o -name "*.tsx" \) -type f -exec sh -c 'wc -l "$1" | awk "{if (\$1 > 500) print \$0}"' _ {} \; 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+              LARGE_FILES=$((LARGE_FILES + COUNT))
+            fi
+          done
+
+          ALERT_COUNT=$(grep -rn "alert(" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+          INLINE_STYLES=$(grep -rn "style={{" $ANALYZE_DIRS --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+          DANGEROUS_HTML=$(grep -rn "dangerouslySetInnerHTML\|innerHTML" $ANALYZE_DIRS --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+          EVAL_USAGE=$(grep -rn "\beval(" $ANALYZE_DIRS --include="*.ts" --include="*.tsx" $EXCLUDE_PATTERN 2>/dev/null | wc -l | tr -d ' ' || echo 0)
+
+          echo "debugger_count=$DEBUGGER_COUNT" >> $GITHUB_OUTPUT
+          echo "todo_count=$TODO_COUNT" >> $GITHUB_OUTPUT
+          echo "any_count=$ANY_COUNT" >> $GITHUB_OUTPUT
+          echo "ts_ignore_count=$TS_IGNORE_COUNT" >> $GITHUB_OUTPUT
+          echo "large_files=$LARGE_FILES" >> $GITHUB_OUTPUT
+          echo "alert_count=$ALERT_COUNT" >> $GITHUB_OUTPUT
+          echo "inline_styles=$INLINE_STYLES" >> $GITHUB_OUTPUT
+          echo "dangerous_html=$DANGEROUS_HTML" >> $GITHUB_OUTPUT
+          echo "eval_usage=$EVAL_USAGE" >> $GITHUB_OUTPUT
+
+          # Calculate code smell severity score
+          CRITICAL_SMELLS=$((DEBUGGER_COUNT + ALERT_COUNT + DANGEROUS_HTML + EVAL_USAGE))
+          echo "critical_smells=$CRITICAL_SMELLS" >> $GITHUB_OUTPUT
+
+          echo "📊 Code Smells Summary:"
+          echo "  Critical: $CRITICAL_SMELLS (debugger: $DEBUGGER_COUNT, alert: $ALERT_COUNT, dangerous HTML: $DANGEROUS_HTML, eval: $EVAL_USAGE)"
+          echo "  Warnings: TODO: $TODO_COUNT, 'any': $ANY_COUNT, TS suppressions: $TS_IGNORE_COUNT"
+          echo "  Quality: Large files: $LARGE_FILES, Inline styles: $INLINE_STYLES"
+        continue-on-error: true
+
+      - name: Coverage Trend Analysis
+        id: coverage_trend
+        run: |
+          echo "📈 Analyzing coverage trends..."
+
+          CURRENT_COVERAGE=${{ steps.coverage.outputs.coverage_pct }}
+          echo "Current coverage: ${CURRENT_COVERAGE}%"
+
+          # Try to get previous coverage from base branch
+          git fetch origin ${{ github.event.pull_request.base.ref }} 2>/dev/null || true
+
+          if git show origin/${{ github.event.pull_request.base.ref }}:coverage/coverage-summary.json > /tmp/prev-coverage.json 2>/dev/null; then
+            PREV_COVERAGE=$(node -pe "JSON.parse(require('fs').readFileSync('/tmp/prev-coverage.json', 'utf8')).total.lines.pct" 2>/dev/null || echo "0")
+            echo "Previous coverage: ${PREV_COVERAGE}%"
+            
+            COVERAGE_DIFF=$(node -pe "${CURRENT_COVERAGE} - ${PREV_COVERAGE}" 2>/dev/null || echo "0")
+            echo "Coverage change: ${COVERAGE_DIFF}%"
+            
+            if [ $(echo "$COVERAGE_DIFF > 0" | bc -l 2>/dev/null || echo 0) -eq 1 ]; then
+              echo "trend=📈 Improved" >> $GITHUB_OUTPUT
+            elif [ $(echo "$COVERAGE_DIFF < 0" | bc -l 2>/dev/null || echo 0) -eq 1 ]; then
+              echo "trend=📉 Decreased" >> $GITHUB_OUTPUT
+            else
+              echo "trend=➡️ Unchanged" >> $GITHUB_OUTPUT
+            fi
+            
+            echo "prev_coverage=$PREV_COVERAGE" >> $GITHUB_OUTPUT
+            echo "coverage_diff=$COVERAGE_DIFF" >> $GITHUB_OUTPUT
+          else
+            echo "No previous coverage data found (first submission)"
+            echo "prev_coverage=N/A" >> $GITHUB_OUTPUT
+            echo "coverage_diff=0" >> $GITHUB_OUTPUT
+            echo "trend=🆕 First submission" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Calculate PR Score
+        id: score
+        run: |
+          SCORE=0
+
+          # TypeScript Check (25 points)
+          if [ "${{ steps.typescript.outputs.ts_failed }}" != "true" ]; then
+            SCORE=$((SCORE + 25))
+            echo "✅ TypeScript: +25 points"
+          else
+            echo "❌ TypeScript: 0 points (compilation errors)"
+          fi
+
+          # Build Check (20 points)
+          if [ "${{ steps.build.outputs.build_failed }}" != "true" ]; then
+            SCORE=$((SCORE + 20))
+            echo "✅ Build: +20 points"
+          else
+            echo "❌ Build: 0 points (build failed)"
+          fi
+
+          # ESLint Check (15 points)
+          if [ "${{ steps.eslint.outputs.lint_failed }}" != "true" ]; then
+            SCORE=$((SCORE + 15))
+            echo "✅ ESLint: +15 points"
+          else
+            echo "❌ ESLint: 0 points (linting errors)"
+          fi
+
+          # Tests (20 points)
+          if [ "${{ steps.tests.outputs.tests_failed }}" != "true" ]; then
+            SCORE=$((SCORE + 20))
+            echo "✅ Tests: +20 points"
+          else
+            echo "❌ Tests: 0 points (tests failed)"
+          fi
+
+          # Coverage (15 points based on percentage)
+          COVERAGE=${{ steps.coverage.outputs.coverage_pct }}
+          COVERAGE_INT=$(echo "$COVERAGE" | cut -d'.' -f1)
+          if [ "$COVERAGE_INT" -ge 80 ]; then
+            SCORE=$((SCORE + 15))
+            echo "✅ Coverage: +15 points (${COVERAGE}%)"
+          elif [ "$COVERAGE_INT" -ge 60 ]; then
+            SCORE=$((SCORE + 10))
+            echo "⚠️  Coverage: +10 points (${COVERAGE}%)"
+          elif [ "$COVERAGE_INT" -ge 40 ]; then
+            SCORE=$((SCORE + 5))
+            echo "⚠️  Coverage: +5 points (${COVERAGE}%)"
+          else
+            echo "❌ Coverage: 0 points (${COVERAGE}%)"
+          fi
+
+          # Console Statements Penalty (max -5 points)
+          CONSOLE_COUNT=${{ steps.console.outputs.console_count }}
+          if [ "$CONSOLE_COUNT" -gt 0 ]; then
+            PENALTY=$((CONSOLE_COUNT > 5 ? 5 : CONSOLE_COUNT))
+            SCORE=$((SCORE - PENALTY))
+            echo "⚠️  Console statements: -${PENALTY} points ($CONSOLE_COUNT found)"
+          else
+            SCORE=$((SCORE + 5))
+            echo "✅ No console statements: +5 points"
+          fi
+
+          # Critical Code Smells Penalty (severe penalty for bad practices)
+          CRITICAL_SMELLS=${{ steps.code_smells.outputs.critical_smells }}
+          if [ "$CRITICAL_SMELLS" -gt 0 ]; then
+            CRITICAL_PENALTY=$((CRITICAL_SMELLS > 10 ? 15 : CRITICAL_SMELLS * 2))
+            SCORE=$((SCORE - CRITICAL_PENALTY))
+            echo "❌ Critical code smells: -${CRITICAL_PENALTY} points ($CRITICAL_SMELLS found)"
+          fi
+
+          # Additional Code Quality Bonus/Penalty (max ±5 points)
+          ANY_COUNT=${{ steps.code_smells.outputs.any_count }}
+          LARGE_FILES=${{ steps.code_smells.outputs.large_files }}
+
+          QUALITY_PENALTY=0
+          if [ "$ANY_COUNT" -gt 5 ]; then
+            QUALITY_PENALTY=$((QUALITY_PENALTY + 2))
+            echo "⚠️  Excessive 'any' usage: -2 points"
+          fi
+          if [ "$LARGE_FILES" -gt 0 ]; then
+            QUALITY_PENALTY=$((QUALITY_PENALTY + 3))
+            echo "⚠️  Large files detected: -3 points"
+          fi
+
+          if [ "$QUALITY_PENALTY" -eq 0 ]; then
+            SCORE=$((SCORE + 5))
+            echo "✅ Good code organization: +5 points"
+          else
+            SCORE=$((SCORE - QUALITY_PENALTY))
+          fi
+
+          echo "total_score=$SCORE" >> $GITHUB_OUTPUT
+          echo "📊 TOTAL SCORE: $SCORE/100"
+
+      - name: Get PR Details
+        id: pr_details
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          BRANCH_NAME="${{ github.head_ref }}"
+
+          # Extract day from branch or PR title (e.g., week1-day1, day-2, etc.)
+          DAY=$(echo "$BRANCH_NAME $PR_TITLE" | grep -oP '(day|Day|DAY)[-_\s]*\K\d+' | head -1 || echo "unknown")
+          WEEK=$(echo "$BRANCH_NAME $PR_TITLE" | grep -oP '(week|Week|WEEK)[-_\s]*\K\d+' | head -1 || echo "unknown")
+
+          echo "pr_author=$PR_AUTHOR" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "day=$DAY" >> $GITHUB_OUTPUT
+          echo "week=$WEEK" >> $GITHUB_OUTPUT
+
+      - name: Post PR Comment with Grading
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = parseInt('${{ steps.score.outputs.total_score }}');
+            const coverage = parseFloat('${{ steps.coverage.outputs.coverage_pct }}') || 0;
+            const consoleCount = parseInt('${{ steps.console.outputs.console_count }}');
+            const tsFailedInput = '${{ steps.typescript.outputs.ts_failed }}';
+            const tsFailed = tsFailedInput === 'true';
+            const buildFailedInput = '${{ steps.build.outputs.build_failed }}';
+            const buildFailed = buildFailedInput === 'true';
+            const lintFailedInput = '${{ steps.eslint.outputs.lint_failed }}';
+            const lintFailed = lintFailedInput === 'true';
+            const testsFailedInput = '${{ steps.tests.outputs.tests_failed }}';
+            const testsFailed = testsFailedInput === 'true';
+
+            const author = '${{ steps.pr_details.outputs.pr_author }}';
+            const day = '${{ steps.pr_details.outputs.day }}';
+            const week = '${{ steps.pr_details.outputs.week }}';
+
+            let grade = 'F';
+            let emoji = '❌';
+            if (score >= 90) { grade = 'A+'; emoji = '🌟'; }
+            else if (score >= 85) { grade = 'A'; emoji = '🎉'; }
+            else if (score >= 80) { grade = 'B+'; emoji = '✅'; }
+            else if (score >= 75) { grade = 'B'; emoji = '👍'; }
+            else if (score >= 70) { grade = 'C+'; emoji = '⚠️'; }
+            else if (score >= 65) { grade = 'C'; emoji = '⚠️'; }
+            else if (score >= 60) { grade = 'D'; emoji = '❌'; }
+
+            const tsStatus = !tsFailed ? '✅ Pass' : '❌ Fail';
+            const tsPoints = !tsFailed ? '25' : '0';
+            const tsDetails = !tsFailed ? 'No compilation errors' : '⚠️ Fix TypeScript errors';
+
+            const buildStatus = !buildFailed ? '✅ Pass' : '❌ Fail';
+            const buildPoints = !buildFailed ? '20' : '0';
+            const buildDetails = !buildFailed ? 'Build successful' : '⚠️ Build failed';
+
+            const lintStatus = !lintFailed ? '✅ Pass' : '❌ Fail';
+            const lintPoints = !lintFailed ? '15' : '0';
+            const lintDetails = !lintFailed ? 'No linting errors' : '⚠️ Fix linting issues';
+
+            const testStatus = !testsFailed ? '✅ Pass' : '❌ Fail';
+            const testPoints = !testsFailed ? '20' : '0';
+            const testDetails = !testsFailed ? 'All tests passing' : '⚠️ Some tests failing';
+
+            const coverageStatus = coverage >= 80 ? '✅' : coverage >= 60 ? '⚠️' : '❌';
+            const coveragePoints = coverage >= 80 ? '15' : coverage >= 60 ? '10' : coverage >= 40 ? '5' : '0';
+            const coverageValue = coverage.toFixed(1);
+
+            const consoleStatus = consoleCount === 0 ? '✅ Clean' : '⚠️ Found';
+            const consolePoints = consoleCount === 0 ? '+5' : '-' + Math.min(consoleCount, 5);
+            const consoleDetails = consoleCount === 0 ? 'No console statements' : consoleCount + ' console statements found';
+
+            // Code smell metrics
+            const debuggerCount = parseInt('${{ steps.code_smells.outputs.debugger_count }}') || 0;
+            const todoCount = parseInt('${{ steps.code_smells.outputs.todo_count }}') || 0;
+            const anyCount = parseInt('${{ steps.code_smells.outputs.any_count }}') || 0;
+            const tsIgnoreCount = parseInt('${{ steps.code_smells.outputs.ts_ignore_count }}') || 0;
+            const largeFiles = parseInt('${{ steps.code_smells.outputs.large_files }}') || 0;
+            const alertCount = parseInt('${{ steps.code_smells.outputs.alert_count }}') || 0;
+            const inlineStyles = parseInt('${{ steps.code_smells.outputs.inline_styles }}') || 0;
+            const dangerousHtml = parseInt('${{ steps.code_smells.outputs.dangerous_html }}') || 0;
+            const evalUsage = parseInt('${{ steps.code_smells.outputs.eval_usage }}') || 0;
+            const criticalSmells = parseInt('${{ steps.code_smells.outputs.critical_smells }}') || 0;
+
+            // Coverage trend
+            const prevCoverage = '${{ steps.coverage_trend.outputs.prev_coverage }}';
+            const coverageDiff = '${{ steps.coverage_trend.outputs.coverage_diff }}';
+            const coverageTrend = '${{ steps.coverage_trend.outputs.trend }}';
+
+            const tsFeedback = !tsFailed ? '✅ **TypeScript**: Excellent! No type errors detected.' : '❌ **TypeScript**: Please fix compilation errors before proceeding.';
+            const buildFeedback = !buildFailed ? '✅ **Build**: Project builds successfully.' : '❌ **Build**: Build process failed. Check your dependencies and build configuration.';
+            const lintFeedback = !lintFailed ? '✅ **Linting**: Code follows style guidelines.' : '⚠️ **Linting**: Please address ESLint warnings/errors for better code quality.';
+            const testFeedback = !testsFailed ? '✅ **Tests**: All unit tests passing!' : '❌ **Tests**: Some tests are failing. Review test output and fix issues.';
+            const coverageFeedback = coverage >= 80 ? '🌟 **Coverage**: Excellent test coverage!' : coverage >= 60 ? '⚠️ **Coverage**: Good coverage, but aim for 80%+.' : '❌ **Coverage**: Test coverage is low. Add more tests.';
+            const consoleFeedback = consoleCount === 0 ? '✅ **Clean Code**: No console statements found.' : '⚠️ **Console Statements**: Found ' + consoleCount + ' console statements. Remove them before production.';
+
+            const nextSteps = score >= 85 ? '🎉 **Excellent work!** Your code meets all quality standards. Ready for review!' : score >= 70 ? '👍 **Good job!** Address the warnings above to improve your score.' : '⚠️ **Needs Improvement:** Please fix the failing checks and resubmit.';
+            const qualityGates = !tsFailed && !buildFailed && !lintFailed && !testsFailed ? '\n✅ **All quality gates passed!** This PR is ready for instructor review.' : '\n❌ **Quality gates failing.** Please address the issues above and push updates.';
+
+            const body = `## ${emoji} Automated PR Grading Report
+
+            ### 📊 Overall Score: **${score}/100** (Grade: **${grade}**)
+
+            **Trainee:** @${author}  
+            **Assignment:** Week ${week}, Day ${day}  
+            **Submitted:** ${new Date().toLocaleString()}
+
+            ---
+
+            ### ✅ Quality Checks
+
+            | Check | Status | Points | Details |
+            |-------|--------|--------|---------|
+            | TypeScript Compilation | ${tsStatus} | ${tsPoints}/25 | ${tsDetails} |
+            | Build Process | ${buildStatus} | ${buildPoints}/20 | ${buildDetails} |
+            | ESLint | ${lintStatus} | ${lintPoints}/15 | ${lintDetails} |
+            | Unit Tests | ${testStatus} | ${testPoints}/20 | ${testDetails} |
+            | Code Coverage | ${coverageStatus} | ${coveragePoints}/15 | ${coverageValue}% coverage |
+            | Console Statements | ${consoleStatus} | ${consolePoints} | ${consoleDetails} |
+
+            ---
+
+            ### 📈 Code Quality Metrics
+
+            <details>
+            <summary>🔍 Code Smell Detection (click to expand)</summary>
+
+            | Metric | Count | Status |
+            |--------|-------|--------|
+            | 🐛 Debugger statements | ${debuggerCount} | ${debuggerCount === 0 ? '✅ Clean' : '❌ Critical'} |
+            | ⚠️ Alert statements | ${alertCount} | ${alertCount === 0 ? '✅ None' : '❌ Critical'} |
+            | 🔓 Dangerous HTML | ${dangerousHtml} | ${dangerousHtml === 0 ? '✅ Safe' : '❌ Security Risk'} |
+            | 🚨 eval() usage | ${evalUsage} | ${evalUsage === 0 ? '✅ None' : '❌ Critical'} |
+            | 📝 TODO/FIXME comments | ${todoCount} | ${todoCount === 0 ? '✅ None' : todoCount < 5 ? '⚠️ Few' : '❌ Many'} |
+            | 🔤 Type 'any' usage | ${anyCount} | ${anyCount === 0 ? '✅ None' : anyCount < 3 ? '⚠️ Few' : '⚠️ Consider specific types'} |
+            | 🚫 TypeScript suppressions | ${tsIgnoreCount} | ${tsIgnoreCount === 0 ? '✅ None' : '⚠️ Found'} |
+            | 📄 Large files (>500 lines) | ${largeFiles} | ${largeFiles === 0 ? '✅ None' : '⚠️ Consider refactoring'} |
+            | 🎨 Inline styles | ${inlineStyles} | ${inlineStyles === 0 ? '✅ None' : inlineStyles < 5 ? '⚠️ Few' : '⚠️ Many'} |
+
+            ${criticalSmells > 0 ? '\n⚠️ **CRITICAL ISSUES DETECTED!** Found ' + criticalSmells + ' critical code smell(s) that must be fixed.\n' : ''}
+            **Recommendations:**
+            ${debuggerCount > 0 ? '\n- ❌ **CRITICAL:** Remove all debugger statements before merging' : ''}${alertCount > 0 ? '\n- ❌ **CRITICAL:** Remove alert() calls - use proper UI notifications' : ''}${dangerousHtml > 0 ? '\n- ❌ **SECURITY:** Avoid dangerouslySetInnerHTML - XSS vulnerability risk' : ''}${evalUsage > 0 ? '\n- ❌ **SECURITY:** Never use eval() - major security risk' : ''}${todoCount > 5 ? '\n- ⚠️ Address TODO comments or create issues for them' : ''}${anyCount > 3 ? '\n- ⚠️ Replace `any` types with specific type definitions' : ''}${tsIgnoreCount > 0 ? '\n- ⚠️ Fix TypeScript errors instead of suppressing them' : ''}${largeFiles > 0 ? '\n- ⚠️ Consider splitting large files into smaller modules' : ''}${inlineStyles > 5 ? '\n- ⚠️ Move inline styles to CSS modules or styled components' : ''}${criticalSmells === 0 && todoCount <= 5 && anyCount <= 3 && tsIgnoreCount === 0 && largeFiles === 0 ? '\n✅ **Excellent!** No significant code smells detected.' : ''}
+
+            </details>
+
+            <details>
+            <summary>📊 Coverage Trend</summary>
+
+            | Metric | Value |
+            |--------|-------|
+            | Current Coverage | ${coverageValue}% |
+            | Previous Coverage | ${prevCoverage === 'N/A' ? 'N/A (first submission)' : prevCoverage + '%'} |
+            | Trend | ${coverageTrend} ${prevCoverage !== 'N/A' && coverageDiff != '0' ? '(' + (parseFloat(coverageDiff) > 0 ? '+' : '') + parseFloat(coverageDiff).toFixed(1) + '%)' : ''} |
+
+            ${prevCoverage !== 'N/A' && parseFloat(coverageDiff) > 0 ? '🎉 **Great job!** Coverage improved since last submission.' : ''}${prevCoverage !== 'N/A' && parseFloat(coverageDiff) < 0 ? '⚠️ **Warning:** Coverage decreased. Add more tests!' : ''}${prevCoverage === 'N/A' ? '🆕 This is your first submission. Keep up the good coverage!' : ''}
+
+            </details>
+
+            ---
+
+            ### 📈 Detailed Feedback
+
+            ${tsFeedback}
+
+            ${buildFeedback}
+
+            ${lintFeedback}
+
+            ${testFeedback}
+
+            ${coverageFeedback}
+
+            ${consoleFeedback}
+
+            ---
+
+            ### 🎯 Next Steps
+
+            ${nextSteps}
+
+            ${qualityGates}            ---
+
+            <details>
+            <summary>📚 Grading Criteria</summary>
+
+            - **TypeScript Compilation (25%)**: Code must compile without errors
+            - **Build Process (20%)**: Project must build successfully  
+            - **ESLint (15%)**: No linting errors
+            - **Unit Tests (20%)**: All tests must pass
+            - **Code Coverage (15%)**: Aim for 80%+ coverage
+            - **Code Cleanliness (5%)**: No console.log statements in production code
+
+            **Bonus**: Clean, well-documented code with meaningful commit messages
+            </details>
+
+            ---
+
+            *🤖 This is an automated grading report. A human instructor will review your work shortly.*`;
+
+            // Find existing grading comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number
+            });
+
+            const existingComment = comments.data.find(comment => 
+              comment.body.includes('Automated PR Grading Report') && 
+              comment.user.type === 'Bot'
+            );
+
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: body
+              });
+              console.log(`Updated existing comment #${existingComment.id}`);
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: body
+              });
+              console.log('Created new grading comment');
+            }
+
+      - name: Set PR Labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const score = parseInt('${{ steps.score.outputs.total_score }}');
+            const labels = [];
+
+            // Remove old labels
+            const currentLabels = context.payload.pull_request.labels.map(l => l.name);
+            const gradingLabels = currentLabels.filter(l => 
+              l.startsWith('score:') || 
+              l.startsWith('status:') || 
+              l === 'needs-work' || 
+              l === 'ready-for-review'
+            );
+
+            for (const label of gradingLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: context.issue.number,
+                  name: label
+                });
+              } catch (e) {
+                // Label might not exist
+              }
+            }
+
+            // Add new labels
+            if (score >= 85) {
+              labels.push('score:excellent', 'ready-for-review');
+            } else if (score >= 70) {
+              labels.push('score:good', 'ready-for-review');
+            } else if (score >= 60) {
+              labels.push('score:passing', 'needs-work');
+            } else {
+              labels.push('score:failing', 'needs-work');
+            }
+
+            const tsFailed = '${{ steps.typescript.outputs.ts_failed }}' === 'true';
+            const buildFailed = '${{ steps.build.outputs.build_failed }}' === 'true';
+
+            if (tsFailed) labels.push('status:typescript-errors');
+            if (buildFailed) labels.push('status:build-failed');
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: labels
+              });
+            }
+
+      - name: Check Quality Gates
+        run: |
+          if [ "${{ steps.typescript.outputs.ts_failed }}" = "true" ] || 
+             [ "${{ steps.build.outputs.build_failed }}" = "true" ] || 
+             [ "${{ steps.tests.outputs.tests_failed }}" = "true" ]; then
+            echo "❌ Quality gates failed. PR needs work."
+            exit 1
+          else
+            echo "✅ All quality gates passed!"
+          fi

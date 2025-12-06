@@ -1,0 +1,46 @@
+/* Error and Not Found Page Styles */
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.not-found-title {
+  font-size: 6rem;
+  margin: 0;
+  color: #e74c3c;
+}
+
+.not-found-subtitle {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.not-found-text {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.error-container {
+  text-align: center;
+  padding: 3rem;
+}
+
+.error-title {
+  color: #e74c3c;
+}
+
+.error-text {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+}
