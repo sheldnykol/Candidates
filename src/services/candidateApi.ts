@@ -52,6 +52,7 @@ export const fetchCandidates = async (): Promise<Candidate[]> => {
   try {
     if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
     const response = await api.get<Candidate[]>("/candidates");
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching candidates:", error);
