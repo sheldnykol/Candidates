@@ -8,7 +8,7 @@ export const CandidateListPage: React.FC = () => {
   // HINT: const { candidates, deleteCandidate } = useCandidate();
   // Your code here
   const { candidates, deleteCandidate } = useCandidate();
-  console.log(candidates);
+  ///console.log(candidates);
   // TODO 2: Get navigate function from useNavigate
   // HINT: const navigate = useNavigate();
   // Your code here
@@ -148,7 +148,7 @@ export const CandidateListPage: React.FC = () => {
           onChange={handleFilterChange}
           className="select-input"
         >
-          <option value="all">All</option>
+          <option value="all">All Statuses</option>
           <option value="pending">Pending</option>
           <option value="approved">Approved</option>
           <option value="rejected">Rejected</option>
