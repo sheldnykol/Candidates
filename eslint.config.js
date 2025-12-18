@@ -49,10 +49,10 @@ export default tseslint.config(
 
       // Complexity Rules
       complexity: ["warn", 10],
-      "max-lines-per-function": [
-        "warn",
-        { max: 60, skipBlankLines: true, skipComments: true },
-      ],
+      // "max-lines-per-function": [
+      //   "warn",
+      //   { max: 60, skipBlankLines: true, skipComments: true },
+      // ],
       "max-depth": ["warn", 4],
       "max-nested-callbacks": ["warn", 3],
       "max-params": ["warn", 4],

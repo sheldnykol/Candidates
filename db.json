@@ -1,18 +1,13 @@
 {
   "candidates": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Sarah Johnson",
       "email": "sarah.johnson@email.com",
       "phone": "+1-555-0101",
       "position": "Senior Frontend Developer",
       "status": "approved",
-      "skills": [
-        "React",
-        "TypeScript",
-        "CSS",
-        "Node.js"
-      ],
+      "skills": ["React", "TypeScript", "CSS", "Node.js"],
       "experience": 5,
       "rating": 4.5,
       "appliedDate": "2024-10-15",
@@ -23,20 +18,15 @@
       "education": "BS Computer Science"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Michael Chen",
       "email": "michael.chen@email.com",
       "phone": "+1-555-0102",
       "position": "Full Stack Developer",
       "status": "pending",
-      "skills": [
-        "Java",
-        "Spring Boot",
-        "React",
-        "PostgreSQL"
-      ],
+      "skills": ["Java", "Spring Boot", "React", "PostgreSQL"],
       "experience": 3,
-      "rating": 4,
+      "rating": 4.0,
       "appliedDate": "2024-11-01",
       "interviewDate": null,
       "notes": "Strong backend experience, waiting for technical interview",
@@ -45,18 +35,13 @@
       "education": "MS Software Engineering"
     },
     {
-      "id": 3,
+      "id": "331",
       "name": "Emily Rodriguez",
       "email": "emily.rodriguez@email.com",
       "phone": "+1-555-0103",
       "position": "UI/UX Designer",
       "status": "on-hold",
-      "skills": [
-        "Figma",
-        "Adobe XD",
-        "CSS",
-        "HTML"
-      ],
+      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
       "experience": 4,
       "rating": 4.2,
       "appliedDate": "2024-10-25",
@@ -67,18 +52,30 @@
       "education": "BA Graphic Design"
     },
     {
-      "id": 4,
+      "id": "3",
+      "name": "Emily Rodriguez",
+      "email": "emily.rodriguez@email.com",
+      "phone": "+1-555-0103",
+      "position": "UI/UX Designer",
+      "status": "on-hold",
+      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
+      "experience": 4,
+      "rating": 4.2,
+      "appliedDate": "2024-10-25",
+      "interviewDate": "2024-10-28",
+      "notes": "Great portfolio, but needs approval from design lead",
+      "yearlySalary": 75000,
+      "location": "Austin, TX",
+      "education": "BA Graphic Design"
+    },
+    {
+      "id": "4",
       "name": "David Kim",
       "email": "david.kim@email.com",
       "phone": "+1-555-0104",
       "position": "DevOps Engineer",
       "status": "approved",
-      "skills": [
-        "AWS",
-        "Docker",
-        "Kubernetes",
-        "CI/CD"
-      ],
+      "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
       "experience": 6,
       "rating": 4.8,
       "appliedDate": "2024-10-10",
@@ -89,17 +86,13 @@
       "education": "BS Information Technology"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Jessica Williams",
       "email": "jessica.williams@email.com",
       "phone": "+1-555-0105",
       "position": "Junior Developer",
       "status": "rejected",
-      "skills": [
-        "JavaScript",
-        "HTML",
-        "CSS"
-      ],
+      "skills": ["JavaScript", "HTML", "CSS"],
       "experience": 1,
       "rating": 2.5,
       "appliedDate": "2024-10-30",
@@ -110,15 +103,13 @@
       "education": "BS Computer Science"
     },
     {
-      "id": "852b",
+      "id": "111",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": [
-        "Testing"
-      ],
+      "skills": ["Testing"],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -127,25 +118,6 @@
       "yearlySalary": 75000,
       "location": "Test City",
       "education": "BS Test"
-    },
-    {
-      "id": "9724",
-      "name": "Test 1",
-      "email": "test1@example.com",
-      "phone": "+1-555-1111",
-      "position": "Developer 1",
-      "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
-      "experience": 1,
-      "rating": 3.5,
-      "appliedDate": "2024-11-19",
-      "interviewDate": null,
-      "notes": "Test 1",
-      "yearlySalary": 60000,
-      "location": "City 1",
-      "education": "BS 1"
     },
     {
       "id": "1256",
@@ -154,9 +126,7 @@
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": [
-        "Testing"
-      ],
+      "skills": ["Testing"],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -167,15 +137,13 @@
       "education": "BS Test"
     },
     {
-      "id": "9ff8",
+      "id": "112",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
+      "skills": ["Skill1"],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -186,15 +154,13 @@
       "education": "BS 1"
     },
     {
-      "id": "89ff",
+      "id": "113",
       "name": "Test 2",
       "email": "test2@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
+      "skills": ["Skill1"],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -205,15 +171,13 @@
       "education": "BS 1"
     },
     {
-      "id": "ba3e",
+      "id": "114",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": [
-        "Testing"
-      ],
+      "skills": ["Testing"],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -224,15 +188,13 @@
       "education": "BS Test"
     },
     {
-      "id": "f30c",
+      "id": "115",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
+      "skills": ["Skill1"],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -243,15 +205,13 @@
       "education": "BS 1"
     },
     {
-      "id": "49b3",
+      "id": "116",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": [
-        "Testing"
-      ],
+      "skills": ["Testing"],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -262,15 +222,13 @@
       "education": "BS Test"
     },
     {
-      "id": "4eb4",
+      "id": "117",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
+      "skills": ["Skill1"],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -281,15 +239,13 @@
       "education": "BS 1"
     },
     {
-      "id": "efd1",
+      "id": "118",
       "name": "Test 2",
       "email": "test2@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": [
-        "Skill1"
-      ],
+      "skills": ["Skill1"],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -298,6 +254,289 @@
       "yearlySalary": 60000,
       "location": "City 1",
       "education": "BS 1"
+    },
+    {
+      "id": "119",
+      "name": "Michael Chen",
+      "email": "michael.chen@email.com",
+      "phone": "+1-555-0119",
+      "position": "Full Stack Developer",
+      "status": "pending",
+      "skills": ["React", "Node.js", "PostgreSQL", "Docker"],
+      "experience": 5,
+      "rating": 4.6,
+      "appliedDate": "2024-12-01",
+      "interviewDate": "2024-12-10",
+      "notes": "Strong technical background with excellent communication skills",
+      "yearlySalary": 95000,
+      "location": "San Francisco, CA",
+      "education": "MS Computer Science"
+    },
+    {
+      "id": "120",
+      "name": "Sarah Thompson",
+      "email": "sarah.thompson@email.com",
+      "phone": "+1-555-0120",
+      "position": "Product Manager",
+      "status": "approved",
+      "skills": ["Agile", "Scrum", "JIRA", "Product Strategy"],
+      "experience": 7,
+      "rating": 4.9,
+      "appliedDate": "2024-11-28",
+      "interviewDate": "2024-12-05",
+      "notes": "Excellent leadership qualities and proven track record",
+      "yearlySalary": 115000,
+      "location": "New York, NY",
+      "education": "MBA"
+    },
+    {
+      "id": "121",
+      "name": "Robert Martinez",
+      "email": "robert.martinez@email.com",
+      "phone": "+1-555-0121",
+      "position": "Data Scientist",
+      "status": "pending",
+      "skills": ["Python", "Machine Learning", "TensorFlow", "SQL"],
+      "experience": 4,
+      "rating": 4.4,
+      "appliedDate": "2024-12-03",
+      "interviewDate": null,
+      "notes": "Impressive portfolio of ML projects",
+      "yearlySalary": 105000,
+      "location": "Chicago, IL",
+      "education": "PhD Data Science"
+    },
+    {
+      "id": "122",
+      "name": "Amanda Lee",
+      "email": "amanda.lee@email.com",
+      "phone": "+1-555-0122",
+      "position": "Frontend Developer",
+      "status": "on-hold",
+      "skills": ["Vue.js", "TypeScript", "Tailwind CSS", "Jest"],
+      "experience": 3,
+      "rating": 4.1,
+      "appliedDate": "2024-12-05",
+      "interviewDate": "2024-12-12",
+      "notes": "Waiting for team lead review",
+      "yearlySalary": 85000,
+      "location": "Portland, OR",
+      "education": "BS Software Engineering"
+    },
+    {
+      "id": "123",
+      "name": "James Wilson",
+      "email": "james.wilson@email.com",
+      "phone": "+1-555-0123",
+      "position": "Security Engineer",
+      "status": "approved",
+      "skills": [
+        "Cybersecurity",
+        "Penetration Testing",
+        "Python",
+        "Network Security"
+      ],
+      "experience": 8,
+      "rating": 4.8,
+      "appliedDate": "2024-11-25",
+      "interviewDate": "2024-12-02",
+      "notes": "Top-tier security expertise, immediate hire recommended",
+      "yearlySalary": 125000,
+      "location": "Washington, DC",
+      "education": "MS Cybersecurity"
+    },
+    {
+      "id": "124",
+      "name": "Jennifer Brown",
+      "email": "jennifer.brown@email.com",
+      "phone": "+1-555-0124",
+      "position": "Mobile Developer",
+      "status": "pending",
+      "skills": ["React Native", "Swift", "Kotlin", "Firebase"],
+      "experience": 4,
+      "rating": 4.3,
+      "appliedDate": "2024-12-06",
+      "interviewDate": "2024-12-15",
+      "notes": "Strong mobile development experience across platforms",
+      "yearlySalary": 92000,
+      "location": "Los Angeles, CA",
+      "education": "BS Computer Engineering"
+    },
+    {
+      "id": "125",
+      "name": "Daniel Garcia",
+      "email": "daniel.garcia@email.com",
+      "phone": "+1-555-0125",
+      "position": "Backend Developer",
+      "status": "rejected",
+      "skills": ["Java", "Spring Boot", "MySQL"],
+      "experience": 2,
+      "rating": 3.0,
+      "appliedDate": "2024-12-04",
+      "interviewDate": "2024-12-08",
+      "notes": "Technical skills below requirements for the position",
+      "yearlySalary": 70000,
+      "location": "Miami, FL",
+      "education": "BS Computer Science"
+    },
+    {
+      "id": "126",
+      "name": "Lisa Anderson",
+      "email": "lisa.anderson@email.com",
+      "phone": "+1-555-0126",
+      "position": "QA Engineer",
+      "status": "approved",
+      "skills": ["Selenium", "Cypress", "Jest", "Test Automation"],
+      "experience": 5,
+      "rating": 4.7,
+      "appliedDate": "2024-11-30",
+      "interviewDate": "2024-12-07",
+      "notes": "Excellent testing methodology and attention to detail",
+      "yearlySalary": 88000,
+      "location": "Denver, CO",
+      "education": "BS Information Systems"
+    },
+    {
+      "id": "127",
+      "name": "Kevin Taylor",
+      "email": "kevin.taylor@email.com",
+      "phone": "+1-555-0127",
+      "position": "Cloud Architect",
+      "status": "pending",
+      "skills": ["AWS", "Azure", "GCP", "Terraform", "Kubernetes"],
+      "experience": 9,
+      "rating": 4.9,
+      "appliedDate": "2024-12-02",
+      "interviewDate": "2024-12-14",
+      "notes": "Highly experienced with multi-cloud environments",
+      "yearlySalary": 145000,
+      "location": "Seattle, WA",
+      "education": "MS Cloud Computing"
+    },
+    {
+      "id": "128",
+      "name": "Michelle White",
+      "email": "michelle.white@email.com",
+      "phone": "+1-555-0128",
+      "position": "UX Researcher",
+      "status": "on-hold",
+      "skills": ["User Research", "Figma", "Data Analysis", "A/B Testing"],
+      "experience": 3,
+      "rating": 4.0,
+      "appliedDate": "2024-12-07",
+      "interviewDate": null,
+      "notes": "Good portfolio, awaiting budget approval",
+      "yearlySalary": 78000,
+      "location": "Austin, TX",
+      "education": "MA Human-Computer Interaction"
+    },
+    {
+      "id": "129",
+      "name": "Christopher Moore",
+      "email": "christopher.moore@email.com",
+      "phone": "+1-555-0129",
+      "position": "Database Administrator",
+      "status": "pending",
+      "skills": [
+        "PostgreSQL",
+        "MongoDB",
+        "MySQL",
+        "Redis",
+        "Performance Tuning"
+      ],
+      "experience": 6,
+      "rating": 4.5,
+      "appliedDate": "2024-12-05",
+      "interviewDate": "2024-12-13",
+      "notes": "Strong database optimization skills",
+      "yearlySalary": 98000,
+      "location": "Boston, MA",
+      "education": "BS Database Management"
+    },
+    {
+      "id": "130",
+      "name": "Angela Martinez",
+      "email": "angela.martinez@email.com",
+      "phone": "+1-555-0130",
+      "position": "Scrum Master",
+      "status": "approved",
+      "skills": ["Agile", "Scrum", "Team Leadership", "Conflict Resolution"],
+      "experience": 5,
+      "rating": 4.6,
+      "appliedDate": "2024-11-29",
+      "interviewDate": "2024-12-06",
+      "notes": "Certified Scrum Master with excellent facilitation skills",
+      "yearlySalary": 90000,
+      "location": "Atlanta, GA",
+      "education": "BS Business Administration"
+    },
+    {
+      "id": "131",
+      "name": "Brian Jackson",
+      "email": "brian.jackson@email.com",
+      "phone": "+1-555-0131",
+      "position": "AI Engineer",
+      "status": "pending",
+      "skills": [
+        "Python",
+        "PyTorch",
+        "NLP",
+        "Computer Vision",
+        "Deep Learning"
+      ],
+      "experience": 4,
+      "rating": 4.7,
+      "appliedDate": "2024-12-08",
+      "interviewDate": "2024-12-16",
+      "notes": "Impressive AI research background",
+      "yearlySalary": 130000,
+      "location": "San Jose, CA",
+      "education": "PhD Artificial Intelligence"
+    },
+    {
+      "id": "132",
+      "name": "Rachel Green",
+      "email": "rachel.green@email.com",
+      "phone": "+1-555-0132",
+      "position": "Technical Writer",
+      "status": "on-hold",
+      "skills": [
+        "Documentation",
+        "Technical Writing",
+        "API Documentation",
+        "Markdown"
+      ],
+      "experience": 3,
+      "rating": 3.8,
+      "appliedDate": "2024-12-09",
+      "interviewDate": null,
+      "notes": "Good writing samples, pending technical review",
+      "yearlySalary": 72000,
+      "location": "Phoenix, AZ",
+      "education": "BA Technical Communication"
+    },
+    {
+      "id": "133",
+      "name": "Steven Harris",
+      "email": "steven.harris@email.com",
+      "phone": "+1-555-0133",
+      "position": "Site Reliability Engineer",
+      "status": "approved",
+      "skills": [
+        "Linux",
+        "Python",
+        "Monitoring",
+        "Incident Management",
+        "Automation"
+      ],
+      "experience": 6,
+      "rating": 4.8,
+      "appliedDate": "2024-11-27",
+      "interviewDate": "2024-12-04",
+      "notes": "Outstanding operational experience and problem-solving skills",
+      "yearlySalary": 112000,
+      "location": "San Francisco, CA",
+      "education": "BS Systems Engineering"
     }
   ]
 }
