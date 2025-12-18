@@ -52,8 +52,10 @@ export const fetchCandidates = async (): Promise<Candidate[]> => {
   try {
     if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
     const response = await api.get<Candidate[]>("/candidates");
-    console.log(response.data);
-    return response.data;
+    /// console.log("response data here", response.data);
+    /// const data = response.data;
+    /// console.log("Return Data", returnData);
+    return response.data.map((c) => ({ ...c, id: Number(c.id) }));
   } catch (error) {
     console.error("Error fetching candidates:", error);
     throw error;
