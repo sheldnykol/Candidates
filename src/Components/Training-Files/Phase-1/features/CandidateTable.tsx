@@ -12,7 +12,7 @@ interface CandidateTableProps {
 /**
  *
  * TODO: Uncomment and complete the implementation 
- 
+
  */
 const PAGE_SIZE = 5;
 export const CandidateTable: React.FC<CandidateTableProps> = ({
@@ -93,7 +93,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
           <thead>
             {/* TODO 8: Create table headers */}
             {/* HINT: Headers should be: Name, Email, Position, Status, Experience, Salary, Actions */}
-            <tr>
+            <tr style={{ textAlignLast: "center" }}>
               <th>Name</th>
               <th>Email</th>
               <th>Position</th>
@@ -113,12 +113,36 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
                 <td>{candidate.name}</td>
                 <td>{candidate.email}</td>
                 <td>{candidate.position}</td>
-                <td>{candidate.status}</td>
+                <td>
+                  <span
+                    className={`status-badge ${getStatusClass(
+                      candidate.status
+                    )}`}
+                  >
+                    {candidate.status}
+                  </span>
+                </td>
+                <td>{candidate.experience}</td>
                 <td>{candidate.yearlySalary}</td>
                 <td>
-                  <button>View</button>
-                  <button>Edit</button>
-                  <button>Delete</button>
+                  <button
+                    className="btn btn-small btn-primary"
+                    onClick={() => onView(candidate.id)}
+                  >
+                    View
+                  </button>
+                  <button
+                    className="btn btn-small btn-success"
+                    onClick={() => onEdit(candidate)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-small btn-danger"
+                    onClick={() => onDelete(candidate.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

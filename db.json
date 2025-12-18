@@ -7,7 +7,12 @@
       "phone": "+1-555-0101",
       "position": "Senior Frontend Developer",
       "status": "approved",
-      "skills": ["React", "TypeScript", "CSS", "Node.js"],
+      "skills": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Node.js"
+      ],
       "experience": 5,
       "rating": 4.5,
       "appliedDate": "2024-10-15",
@@ -24,9 +29,14 @@
       "phone": "+1-555-0102",
       "position": "Full Stack Developer",
       "status": "pending",
-      "skills": ["Java", "Spring Boot", "React", "PostgreSQL"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL"
+      ],
       "experience": 3,
-      "rating": 4.0,
+      "rating": 4,
       "appliedDate": "2024-11-01",
       "interviewDate": null,
       "notes": "Strong backend experience, waiting for technical interview",
@@ -35,30 +45,18 @@
       "education": "MS Software Engineering"
     },
     {
-      "id": "331",
-      "name": "Emily Rodriguez",
-      "email": "emily.rodriguez@email.com",
-      "phone": "+1-555-0103",
-      "position": "UI/UX Designer",
-      "status": "on-hold",
-      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
-      "experience": 4,
-      "rating": 4.2,
-      "appliedDate": "2024-10-25",
-      "interviewDate": "2024-10-28",
-      "notes": "Great portfolio, but needs approval from design lead",
-      "yearlySalary": 75000,
-      "location": "Austin, TX",
-      "education": "BA Graphic Design"
-    },
-    {
       "id": "3",
       "name": "Emily Rodriguez",
       "email": "emily.rodriguez@email.com",
       "phone": "+1-555-0103",
       "position": "UI/UX Designer",
       "status": "on-hold",
-      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
+      "skills": [
+        "Figma",
+        "Adobe XD",
+        "CSS",
+        "HTML"
+      ],
       "experience": 4,
       "rating": 4.2,
       "appliedDate": "2024-10-25",
@@ -75,7 +73,12 @@
       "phone": "+1-555-0104",
       "position": "DevOps Engineer",
       "status": "approved",
-      "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
+      "skills": [
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "CI/CD"
+      ],
       "experience": 6,
       "rating": 4.8,
       "appliedDate": "2024-10-10",
@@ -92,7 +95,11 @@
       "phone": "+1-555-0105",
       "position": "Junior Developer",
       "status": "rejected",
-      "skills": ["JavaScript", "HTML", "CSS"],
+      "skills": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
       "experience": 1,
       "rating": 2.5,
       "appliedDate": "2024-10-30",
@@ -109,7 +116,9 @@
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -126,7 +135,9 @@
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -143,7 +154,9 @@
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -160,7 +173,9 @@
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -177,7 +192,9 @@
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -194,7 +211,9 @@
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -211,7 +230,9 @@
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -228,7 +249,9 @@
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -245,7 +268,9 @@
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -262,7 +287,12 @@
       "phone": "+1-555-0119",
       "position": "Full Stack Developer",
       "status": "pending",
-      "skills": ["React", "Node.js", "PostgreSQL", "Docker"],
+      "skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Docker"
+      ],
       "experience": 5,
       "rating": 4.6,
       "appliedDate": "2024-12-01",
@@ -279,7 +309,12 @@
       "phone": "+1-555-0120",
       "position": "Product Manager",
       "status": "approved",
-      "skills": ["Agile", "Scrum", "JIRA", "Product Strategy"],
+      "skills": [
+        "Agile",
+        "Scrum",
+        "JIRA",
+        "Product Strategy"
+      ],
       "experience": 7,
       "rating": 4.9,
       "appliedDate": "2024-11-28",
@@ -296,7 +331,12 @@
       "phone": "+1-555-0121",
       "position": "Data Scientist",
       "status": "pending",
-      "skills": ["Python", "Machine Learning", "TensorFlow", "SQL"],
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "TensorFlow",
+        "SQL"
+      ],
       "experience": 4,
       "rating": 4.4,
       "appliedDate": "2024-12-03",
@@ -313,7 +353,12 @@
       "phone": "+1-555-0122",
       "position": "Frontend Developer",
       "status": "on-hold",
-      "skills": ["Vue.js", "TypeScript", "Tailwind CSS", "Jest"],
+      "skills": [
+        "Vue.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Jest"
+      ],
       "experience": 3,
       "rating": 4.1,
       "appliedDate": "2024-12-05",
@@ -352,7 +397,12 @@
       "phone": "+1-555-0124",
       "position": "Mobile Developer",
       "status": "pending",
-      "skills": ["React Native", "Swift", "Kotlin", "Firebase"],
+      "skills": [
+        "React Native",
+        "Swift",
+        "Kotlin",
+        "Firebase"
+      ],
       "experience": 4,
       "rating": 4.3,
       "appliedDate": "2024-12-06",
@@ -369,9 +419,13 @@
       "phone": "+1-555-0125",
       "position": "Backend Developer",
       "status": "rejected",
-      "skills": ["Java", "Spring Boot", "MySQL"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL"
+      ],
       "experience": 2,
-      "rating": 3.0,
+      "rating": 3,
       "appliedDate": "2024-12-04",
       "interviewDate": "2024-12-08",
       "notes": "Technical skills below requirements for the position",
@@ -386,7 +440,12 @@
       "phone": "+1-555-0126",
       "position": "QA Engineer",
       "status": "approved",
-      "skills": ["Selenium", "Cypress", "Jest", "Test Automation"],
+      "skills": [
+        "Selenium",
+        "Cypress",
+        "Jest",
+        "Test Automation"
+      ],
       "experience": 5,
       "rating": 4.7,
       "appliedDate": "2024-11-30",
@@ -403,7 +462,13 @@
       "phone": "+1-555-0127",
       "position": "Cloud Architect",
       "status": "pending",
-      "skills": ["AWS", "Azure", "GCP", "Terraform", "Kubernetes"],
+      "skills": [
+        "AWS",
+        "Azure",
+        "GCP",
+        "Terraform",
+        "Kubernetes"
+      ],
       "experience": 9,
       "rating": 4.9,
       "appliedDate": "2024-12-02",
@@ -420,9 +485,14 @@
       "phone": "+1-555-0128",
       "position": "UX Researcher",
       "status": "on-hold",
-      "skills": ["User Research", "Figma", "Data Analysis", "A/B Testing"],
+      "skills": [
+        "User Research",
+        "Figma",
+        "Data Analysis",
+        "A/B Testing"
+      ],
       "experience": 3,
-      "rating": 4.0,
+      "rating": 4,
       "appliedDate": "2024-12-07",
       "interviewDate": null,
       "notes": "Good portfolio, awaiting budget approval",
@@ -460,7 +530,12 @@
       "phone": "+1-555-0130",
       "position": "Scrum Master",
       "status": "approved",
-      "skills": ["Agile", "Scrum", "Team Leadership", "Conflict Resolution"],
+      "skills": [
+        "Agile",
+        "Scrum",
+        "Team Leadership",
+        "Conflict Resolution"
+      ],
       "experience": 5,
       "rating": 4.6,
       "appliedDate": "2024-11-29",
