@@ -27,7 +27,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
   onView,
 }) => {
   // TODO: Remove this console log after completing the implementation
-  console.log("CandidateTable candidates:", candidates);
+  //console.log("CandidateTable candidates:", candidates);
 
   // TODO 1: Initialize currentPage state with useState
   // HINT: Start with page 1
@@ -81,7 +81,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
   // Use className="empty-state"
   // Your code here
   if (candidates.length === 0) {
-    return <div className="empty-state"> No candidates found!</div>;
+    return <div className="empty-state"> No candidates found.</div>;
   }
 
   return (
@@ -100,7 +100,7 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
               <th>Status</th>
               <th>Experience</th>
               <th>Salary</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -139,7 +139,15 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
                   </button>
                   <button
                     className="btn btn-small btn-danger"
-                    onClick={() => onDelete(candidate.id)}
+                    onClick={() => {
+                      if (
+                        // eslint-disable-next-line no-alert
+                        window.confirm(
+                          "Are you sure you want to delete this candidate ?"
+                        )
+                      )
+                        onDelete(candidate.id);
+                    }}
                   >
                     Delete
                   </button>
