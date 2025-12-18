@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCandidate } from "../../../../hooks/useCandidate";
 import { CandidateTable } from "../../Phase-1/features/CandidateTable";
+import type { Candidate } from "../../../../types/candidate";
 
 export const CandidateListPage: React.FC = () => {
   // TODO 1: Get candidates and deleteCandidate from useCandidate hook
@@ -77,8 +78,8 @@ export const CandidateListPage: React.FC = () => {
   // HINT: Takes id number
   // Call deleteCandidate(id)
   const handleDelete = (id: number) => {
-    if (window.confirm("Are you sure you want to delete this candidate ?"))
-      deleteCandidate(id);
+    // if (window.confirm("Are you sure you want to delete this candidate ?"))
+    deleteCandidate(id);
   };
 
   // TODO 10: Create handleView function
