@@ -1,32 +1,79 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useCandidate } from "../../../../hooks/useCandidate";
+import { useEffect, useState } from "react";
+import type { Candidate } from "../../../../types/candidate";
+import * as candidateApi from "../../../../services/candidateApi";
 
 export const CandidateDetailPage: React.FC = () => {
   // TODO 1: Get id from URL params
   // HINT: const { id } = useParams<{ id: string }>();
   // Your code here
   const { id } = useParams<{ id: string }>();
+  const candidate_route = "/candidates";
 
   // TODO 2: Get navigate function from useNavigate
   // HINT: const navigate = useNavigate();
   // Your code here
   const navigate = useNavigate();
+  const { getCandidateById, deleteCandidate } = useCandidate();
+  const [candidate, setCandidate] = useState<Candidate | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line max-statements
+    const loadCandidate = async () => {
+      if (!id) {
+        setError("No ID provided");
+        setLoading(false);
+        return;
+      }
+      const contextCandidate = getCandidateById(Number(id));
+      if (contextCandidate) {
+        setCandidate(contextCandidate);
+        setError(null);
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        const fetched = await candidateApi.fetchCandidateById(Number(id));
+        setCandidate(fetched);
+        setError(null);
+      } catch {
+        setCandidate(null);
+        setError("Candidate not found");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCandidate();
+  }, [id, getCandidateById]);
 
   // TODO 3: Get getCandidateById and deleteCandidate from useCandidate hook
   // HINT: const { getCandidateById, deleteCandidate } = useCandidate();
   // Your code here
-  const { getCandidateById, deleteCandidate } = useCandidate();
 
   // TODO 4: Get the candidate by id
   // HINT: const candidate = getCandidateById(Number(id));
   // Your code here
-  const candidate = getCandidateById(Number(id));
+  //const candidate = getCandidateById(Number(id));
   //console.log("candidate", candidate, typeof id);
   // TODO 5: Add check if candidate doesn't exist
   // HINT: If !candidate, return not found message
   // Structure same as EditCandidatePage
   // Your not found check here
-  if (!candidate) {
+
+  if (loading) {
+    return (
+      <div className="form-wrapper column-center">
+        <p>Loading candidate details...</p>
+      </div>
+    );
+  }
+
+  if (error || !candidate) {
     return (
       <div className="not-found-container">
         <h2 className="error-title"> Candidate Not Found</h2>
@@ -34,7 +81,7 @@ export const CandidateDetailPage: React.FC = () => {
           The candidate you're looking for doesn't exist.
         </p>
         <button
-          onClick={() => navigate("/candidates")}
+          onClick={() => navigate(candidate_route)}
           className="btn btn-primary"
         >
           Back to Candidates
@@ -46,7 +93,7 @@ export const CandidateDetailPage: React.FC = () => {
   // TODO 6: Create handleEdit function
   // HINT: Navigate to `/candidates/${candidate.id}/edit`
   const handleEdit = () => {
-    navigate(`/candidate/${candidate.id}/edit`);
+    navigate(`/candidates/${candidate.id}/edit`);
   };
 
   // TODO 7: Create handleDelete function
@@ -55,13 +102,13 @@ export const CandidateDetailPage: React.FC = () => {
     // eslint-disable-next-line no-alert
     if (window.confirm("Are you sure you want to delete this candidate?"))
       deleteCandidate(candidate.id);
-    navigate("/candidate");
+    navigate(candidate_route);
   };
 
   // TODO 8: Create handleBack function
   // HINT: Navigate to "/candidates"
   const handleBack = () => {
-    navigate("/candidates");
+    navigate(candidate_route);
   };
 
   return (

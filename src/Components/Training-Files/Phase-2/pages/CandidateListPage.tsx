@@ -71,7 +71,7 @@ export const CandidateListPage: React.FC = () => {
   // HINT: Takes Candidate object
   // Navigate to `/candidates/${candidate.id}/edit`
   const handleEdit = (candidate: Candidate) => {
-    navigate(`candidates/${candidate.id}/edit`);
+    navigate(`/candidates/${candidate.id}/edit`);
   };
 
   // TODO 9: Create handleDelete function

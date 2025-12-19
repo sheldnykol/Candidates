@@ -35,6 +35,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
   const {
     values,
     // TODO : Uncomment after implementing error handling
+    errors,
     handleChange,
     handleReset,
     setFieldError,
@@ -129,7 +130,9 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.name}
               onChange={handleChange}
               required
+              className="form-input"
             />
+            {errors.name && <p className="form-error">{errors.name}</p>}
           </div>
 
           {/* TODO 2: Create Email input field */}
@@ -143,7 +146,9 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.email}
               onChange={handleChange}
               required
+              className="form-input"
             />
+            {errors.email && <p className="form-error">{errors.email}</p>}
           </div>
         </div>
 
@@ -158,7 +163,9 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               name="phone"
               value={values.phone}
               onChange={handleChange}
+              className="form-input"
             />
+            {errors.phone && <p className="form-error">{errors.phone}</p>}
           </div>
 
           {/* TODO 4: Create Position input field */}
@@ -172,7 +179,9 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.position}
               onChange={handleChange}
               required
+              className="form-input"
             />
+            {errors.position && <p className="form-error">{errors.position}</p>}
           </div>
         </div>
 
@@ -182,7 +191,12 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
           <div className="form-group">
             {/* Your status field here */}
             <label className="form-label">Status</label>
-            <select name="status" value={values.status} onChange={handleChange}>
+            <select
+              name="status"
+              value={values.status}
+              onChange={handleChange}
+              className="form-select"
+            >
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="rejected">Rejected</option>
@@ -200,6 +214,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               name="location"
               value={values.location}
               onChange={handleChange}
+              className="form-input"
             />
           </div>
         </div>
@@ -216,7 +231,11 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.experience}
               onChange={handleChange}
               min="0"
+              className="form-input"
             />
+            {errors.experience && (
+              <p className="form-error">{errors.experience}</p>
+            )}
           </div>
 
           {/* TODO 8: Create Yearly Salary input field */}
@@ -231,7 +250,11 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               onChange={handleChange}
               min="0"
               step="1000"
+              className="form-input"
             />
+            {errors.yearlySalary && (
+              <p className="form-error">{errors.yearlySalary}</p>
+            )}
           </div>
         </div>
 
@@ -249,7 +272,9 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               min="0"
               max="5"
               step="0.1"
+              className="form-input"
             />
+            {errors.rating && <p className="form-error">{errors.rating}</p>}
           </div>
 
           {/* TODO 10: Create Education input field */}
@@ -262,6 +287,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               name="education"
               value={values.education}
               onChange={handleChange}
+              className="form-input"
             />
           </div>
         </div>
@@ -277,6 +303,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
             value={values.skills}
             onChange={handleChange}
             placeholder="React, TypeScript, Node.js, CSS"
+            className="form-input"
           />
         </div>
 
@@ -292,6 +319,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.appliedDate}
               onChange={handleChange}
               required
+              className="form-input"
             />
           </div>
 
@@ -305,6 +333,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               name="interviewDate"
               value={values.interviewDate}
               onChange={handleChange}
+              className="form-input"
             />
           </div>
         </div>
@@ -319,6 +348,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
             value={values.notes}
             onChange={handleChange}
             rows={4}
+            className="form-input"
           />
         </div>
 
