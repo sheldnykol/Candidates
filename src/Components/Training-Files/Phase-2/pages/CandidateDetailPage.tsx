@@ -3,7 +3,7 @@ import { useCandidate } from "../../../../hooks/useCandidate";
 import { useEffect, useState } from "react";
 import type { Candidate } from "../../../../types/candidate";
 import * as candidateApi from "../../../../services/candidateApi";
-
+// eslint-disable-next-line max-statements
 export const CandidateDetailPage: React.FC = () => {
   // TODO 1: Get id from URL params
   // HINT: const { id } = useParams<{ id: string }>();
@@ -84,7 +84,7 @@ export const CandidateDetailPage: React.FC = () => {
           onClick={() => navigate(candidate_route)}
           className="btn btn-primary"
         >
-          Back to Candidates
+          back to candidates
         </button>
       </div>
     );
@@ -101,7 +101,7 @@ export const CandidateDetailPage: React.FC = () => {
   const handleDelete = () => {
     // eslint-disable-next-line no-alert
     if (window.confirm("Are you sure you want to delete this candidate?"))
-      deleteCandidate(candidate.id);
+      deleteCandidate(Number(candidate.id));
     navigate(candidate_route);
   };
 
@@ -112,7 +112,7 @@ export const CandidateDetailPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="detail-container">
       {/* TODO 9: Create detail header */}
       {/* HINT: Use div with className="detail-header" */}
       <div className="detail-header">
@@ -126,7 +126,7 @@ export const CandidateDetailPage: React.FC = () => {
         {/* Your header content here */}
         <h1 className="page-title">{candidate.name}</h1>
         <span className={`status-badge-large status-badge-${candidate.status}`}>
-          {candidate.status}
+          {candidate.status.replace("-", " ").toUpperCase()}
         </span>
       </div>
 
@@ -261,8 +261,12 @@ export const CandidateDetailPage: React.FC = () => {
         {/* 3. Delete button (btn-danger) → handleDelete */}
         {/* Your buttons here */}
         <div className="detail-actions">
-          <button className="btn btn-secondary" onClick={handleBack}>
-            Back
+          <button
+            className="btn btn-secondary"
+            aria-label="back to candidates"
+            onClick={handleBack}
+          >
+            back to candidates
           </button>
           <button className="btn btn-primary" onClick={handleEdit}>
             Edit

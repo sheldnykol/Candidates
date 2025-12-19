@@ -5,8 +5,8 @@ import { Pagination } from "../../../common/Pagination";
 interface CandidateTableProps {
   candidates: Candidate[];
   onEdit: (candidate: Candidate) => void;
-  onDelete: (id: number) => void;
-  onView: (id: number) => void;
+  onDelete: (id: number | string) => void;
+  onView: (id: number | string) => void;
 }
 
 /**

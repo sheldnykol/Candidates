@@ -52,6 +52,23 @@ export const EditCandidatePage: React.FC = () => {
     loadCandidate();
   }, [id, getCandidateById]);
 
+  if (error || !candidate) {
+    return (
+      <div className="not-found-container">
+        <h2 className="error-title">Candidate Not Found</h2>
+        <p className="error-text">
+          The candidate you're trying to edit doesn't exist.
+        </p>
+        <button
+          onClick={() => navigate("/candidates")}
+          className="btn btn-primary"
+        >
+          Back to Candidates
+        </button>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="form-wrapper column-center">
@@ -81,22 +98,6 @@ export const EditCandidatePage: React.FC = () => {
     </div>
   */
   // Your not found check here
-  if (error || !candidate) {
-    return (
-      <div className="not-found-container">
-        <h2 className="error-title">Candidate Not Found</h2>
-        <p className="error-text">
-          The candidate you're trying to edit doesn't exist.
-        </p>
-        <button
-          onClick={() => navigate("/candidates")}
-          className="btn btn-primary"
-        >
-          Back to Candidates
-        </button>
-      </div>
-    );
-  }
 
   // TODO 6: Create handleSubmit function
   // HINT: Takes data: Omit<Candidate, "id">
@@ -108,7 +109,7 @@ export const EditCandidatePage: React.FC = () => {
   const handleSubmit = async (data: Omit<Candidate, "id">) => {
     try {
       setSubmitError(null);
-      await updateCandidate(candidate.id, data);
+      await updateCandidate(Number(candidate.id), data);
       navigate(`/candidates/${candidate.id}`);
     } catch {
       setSubmitError("Candidate was not updated");

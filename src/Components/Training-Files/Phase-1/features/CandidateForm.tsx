@@ -32,14 +32,8 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
     education: initialData?.education || "",
   };
 
-  const {
-    values,
-    // TODO : Uncomment after implementing error handling
-    errors,
-    handleChange,
-    handleReset,
-    setFieldError,
-  } = useForm(defaultValues);
+  const { values, errors, handleChange, handleReset, setFieldError } =
+    useForm(defaultValues);
 
   // eslint-disable-next-line max-statements
   const validateForm = (): boolean => {
@@ -51,7 +45,6 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
     }
 
     // TODO: remove the eslint disable comment after implementing the form
-    // eslint-disable-next-line sonarjs/slow-regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!values.email.trim()) {
       setFieldError("email", "Email is required");
@@ -116,7 +109,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
   return (
     <div className="form-container">
       <form onSubmit={handleSubmit} className="candidate-form">
-        <div className="form-row">
+        <div className="form-grid">
           {/* TODO 1: Create Name input field */}
           {/* HINT: Use input type="text", name="name", required */}
           {/* Include label, value from values.name, onChange handler */}
@@ -152,7 +145,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="form-grid">
           {/* TODO 3: Create Phone input field */}
           {/* HINT: type="tel", not required */}
           <div className="form-group">
@@ -165,7 +158,6 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               onChange={handleChange}
               className="form-input"
             />
-            {errors.phone && <p className="form-error">{errors.phone}</p>}
           </div>
 
           {/* TODO 4: Create Position input field */}
@@ -179,13 +171,14 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
               value={values.position}
               onChange={handleChange}
               required
+              placeholder="position is required"
               className="form-input"
             />
             {errors.position && <p className="form-error">{errors.position}</p>}
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="form-grid">
           {/* TODO 5: Create Status select field */}
           {/* HINT: Use select with options: pending, approved, rejected, on-hold */}
           <div className="form-group">
@@ -219,11 +212,11 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="form-grid">
           {/* TODO 7: Create Experience input field */}
           {/* HINT: type="number", min="0" */}
           <div className="form-group">
-            {/* Your experience field here */}{" "}
+            {/* Your experience field here */}
             <label className="form-label">Experience (years)</label>
             <input
               type="number"
@@ -258,7 +251,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
           </div>
         </div>
 
-        <div className="form-row">
+        <div className="form-grid">
           {/* TODO 9: Create Rating input field */}
           {/* HINT: type="number", min="0", max="5", step="0.1" */}
           <div className="form-group">
@@ -296,13 +289,13 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
         {/* HINT: type="text", placeholder with comma-separated example */}
         <div className="form-group">
           {/* Your skills field here */}
-          <label className="form-label">Skills</label>
+          <label className="form-label">Skills (comma separated)</label>
           <input
             type="text"
             name="skills"
             value={values.skills}
             onChange={handleChange}
-            placeholder="React, TypeScript, Node.js, CSS"
+            placeholder="e.g., React, TypeScript, Node.js"
             className="form-input"
           />
         </div>
@@ -340,7 +333,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
 
         {/* TODO 14: Create Notes textarea field */}
         {/* HINT: Use textarea with rows="4" */}
-        <div className="form-group">
+        <div className="form-group form-group-full">
           {/* Your notes field here */}
           <label className="form-label">Notes</label>
           <textarea
@@ -348,7 +341,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
             value={values.notes}
             onChange={handleChange}
             rows={4}
-            className="form-input"
+            className="form-textarea"
           />
         </div>
 
@@ -358,7 +351,7 @@ export const CandidateForm: React.FC<CandidateFormProps> = ({
         <div className="form-actions">
           {/* Your buttons here */}
           <button type="submit" className="btn btn-primary">
-            {initialData ? "Update Candidate" : "Add Candidate"}
+            Submit
           </button>
           <button
             type="button"

@@ -77,15 +77,15 @@ export const CandidateListPage: React.FC = () => {
   // TODO 9: Create handleDelete function
   // HINT: Takes id number
   // Call deleteCandidate(id)
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number | string) => {
     // if (window.confirm("Are you sure you want to delete this candidate ?"))
-    deleteCandidate(id);
+    deleteCandidate(Number(id));
   };
 
   // TODO 10: Create handleView function
   // HINT: Takes id number
   // Navigate to `/candidates/${id}`
-  const handleView = (id: number) => {
+  const handleView = (id: number | string) => {
     navigate(`/candidates/${id}`);
   };
 

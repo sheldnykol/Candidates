@@ -7,6 +7,7 @@
 
 import axios from "axios";
 import type { Candidate } from "../types/candidate";
+const candidate_route = "/candidates";
 
 // Create axios instance with base configuration
 const api = axios.create({
@@ -49,27 +50,17 @@ const delay = (ms: number): Promise<void> => {
  * Fetch all candidates from the API
  */
 export const fetchCandidates = async (): Promise<Candidate[]> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.get<Candidate[]>("/candidates");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching candidates:", error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.get<Candidate[]>(candidate_route);
+  return response.data;
 };
 /**
  * Fetch a single candidate by ID
  */
 export const fetchCandidateById = async (id: number): Promise<Candidate> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.get<Candidate>(`/candidates/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching candidate ${id}:`, error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.get<Candidate>(`${candidate_route}/${id}`);
+  return response.data;
 };
 
 /**
@@ -78,14 +69,9 @@ export const fetchCandidateById = async (id: number): Promise<Candidate> => {
 export const createCandidate = async (
   candidate: Omit<Candidate, "id">
 ): Promise<Candidate> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.post<Candidate>("/candidates", candidate);
-    return response.data;
-  } catch (error) {
-    console.error("Error creating candidate:", error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.post<Candidate>(candidate_route, candidate);
+  return response.data;
 };
 
 /**
@@ -95,43 +81,31 @@ export const updateCandidate = async (
   id: number,
   updates: Partial<Candidate>
 ): Promise<Candidate> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.patch<Candidate>(`/candidates/${id}`, updates);
-    return response.data;
-  } catch (error) {
-    console.error(`Error updating candidate ${id}:`, error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.patch<Candidate>(
+    `${candidate_route}/${id}`,
+    updates
+  );
+  return response.data;
 };
 
 /**
  * Delete a candidate
  */
 export const deleteCandidate = async (id: number): Promise<void> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    await api.delete(`/candidates/${id}`);
-  } catch (error) {
-    console.error(`Error deleting candidate ${id}:`, error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  await api.delete(`${candidate_route}/${id}`);
 };
 
 /**
  * Search candidates by query (name, email, position)
  */
 export const searchCandidates = async (query: string): Promise<Candidate[]> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.get<Candidate[]>("/candidates", {
-      params: { q: query },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error searching candidates:", error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.get<Candidate[]>(candidate_route, {
+    params: { q: query },
+  });
+  return response.data;
 };
 
 /**
@@ -140,14 +114,9 @@ export const searchCandidates = async (query: string): Promise<Candidate[]> => {
 export const fetchCandidatesByStatus = async (
   status: string
 ): Promise<Candidate[]> => {
-  try {
-    if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
-    const response = await api.get<Candidate[]>("/candidates", {
-      params: { status },
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching candidates by status ${status}:`, error);
-    throw error;
-  }
+  if (API_DELAY_MS > 0) await delay(API_DELAY_MS);
+  const response = await api.get<Candidate[]>(candidate_route, {
+    params: { status },
+  });
+  return response.data;
 };
