@@ -9,14 +9,23 @@
       "score": 0,
       "mergedAt": "2025-12-18T14:00:38.736Z",
       "prUrl": "https://github.com/React-2-Week-Bootcamp/react-school-project-days-8-10-sheldnykol/pull/1"
+    },
+    {
+      "prNumber": "3",
+      "prTitle": "Phase2",
+      "week": "unknown",
+      "day": "unknown",
+      "score": 0,
+      "mergedAt": "2025-12-19T14:48:45.640Z",
+      "prUrl": "https://github.com/React-2-Week-Bootcamp/react-school-project-days-8-10-sheldnykol/pull/3"
     }
   ],
   "stats": {
-    "totalSubmissions": 1,
+    "totalSubmissions": 2,
     "averageScore": "0.0",
     "medianScore": "0.0",
     "highestScore": 0,
     "lowestScore": 0,
-    "lastUpdated": "2025-12-18T14:00:38.736Z"
+    "lastUpdated": "2025-12-19T14:48:45.640Z"
   }
 }
