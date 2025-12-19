@@ -1,14 +1,19 @@
 {
   "candidates": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Sarah Johnson",
       "email": "sarah.johnson@email.com",
       "phone": "+1-555-0101",
       "position": "Senior Frontend Developer",
       "status": "approved",
-      "skills": ["React", "TypeScript", "CSS", "Node.js"],
-      "experience": 5,
+      "skills": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Node.js"
+      ],
+      "experience": 10,
       "rating": 4.5,
       "appliedDate": "2024-10-15",
       "interviewDate": "2024-10-20",
@@ -18,15 +23,20 @@
       "education": "BS Computer Science"
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Michael Chen",
       "email": "michael.chen@email.com",
       "phone": "+1-555-0102",
       "position": "Full Stack Developer",
       "status": "pending",
-      "skills": ["Java", "Spring Boot", "React", "PostgreSQL"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "React",
+        "PostgreSQL"
+      ],
       "experience": 3,
-      "rating": 4.0,
+      "rating": 4,
       "appliedDate": "2024-11-01",
       "interviewDate": null,
       "notes": "Strong backend experience, waiting for technical interview",
@@ -35,13 +45,18 @@
       "education": "MS Software Engineering"
     },
     {
-      "id": 331,
+      "id": "331",
       "name": "Emily Rodriguez",
       "email": "emily.rodriguez@email.com",
       "phone": "+1-555-0103",
       "position": "UI/UX Designer",
       "status": "on-hold",
-      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
+      "skills": [
+        "Figma",
+        "Adobe XD",
+        "CSS",
+        "HTML"
+      ],
       "experience": 4,
       "rating": 4.2,
       "appliedDate": "2024-10-25",
@@ -52,13 +67,18 @@
       "education": "BA Graphic Design"
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Emily Rodriguez",
       "email": "emily.rodriguez@email.com",
       "phone": "+1-555-0103",
       "position": "UI/UX Designer",
       "status": "on-hold",
-      "skills": ["Figma", "Adobe XD", "CSS", "HTML"],
+      "skills": [
+        "Figma",
+        "Adobe XD",
+        "CSS",
+        "HTML"
+      ],
       "experience": 4,
       "rating": 4.2,
       "appliedDate": "2024-10-25",
@@ -69,13 +89,18 @@
       "education": "BA Graphic Design"
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "David Kim",
       "email": "david.kim@email.com",
       "phone": "+1-555-0104",
       "position": "DevOps Engineer",
       "status": "approved",
-      "skills": ["AWS", "Docker", "Kubernetes", "CI/CD"],
+      "skills": [
+        "AWS",
+        "Docker",
+        "Kubernetes",
+        "CI/CD"
+      ],
       "experience": 6,
       "rating": 4.8,
       "appliedDate": "2024-10-10",
@@ -86,13 +111,17 @@
       "education": "BS Information Technology"
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Jessica Williams",
       "email": "jessica.williams@email.com",
       "phone": "+1-555-0105",
       "position": "Junior Developer",
       "status": "rejected",
-      "skills": ["JavaScript", "HTML", "CSS"],
+      "skills": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
       "experience": 1,
       "rating": 2.5,
       "appliedDate": "2024-10-30",
@@ -103,13 +132,15 @@
       "education": "BS Computer Science"
     },
     {
-      "id": 111,
+      "id": "111",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -120,13 +151,15 @@
       "education": "BS Test"
     },
     {
-      "id": 1256,
+      "id": "1256",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -137,13 +170,15 @@
       "education": "BS Test"
     },
     {
-      "id": 112,
+      "id": "112",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -154,13 +189,15 @@
       "education": "BS 1"
     },
     {
-      "id": 113,
+      "id": "113",
       "name": "Test 2",
       "email": "test2@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -171,13 +208,15 @@
       "education": "BS 1"
     },
     {
-      "id": 114,
+      "id": "114",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -188,13 +227,15 @@
       "education": "BS Test"
     },
     {
-      "id": 115,
+      "id": "115",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -205,13 +246,15 @@
       "education": "BS 1"
     },
     {
-      "id": 116,
+      "id": "116",
       "name": "Test User",
       "email": "test@example.com",
       "phone": "+1-555-9999",
       "position": "Test Developer",
       "status": "pending",
-      "skills": ["Testing"],
+      "skills": [
+        "Testing"
+      ],
       "experience": 3,
       "rating": 4,
       "appliedDate": "2024-11-19",
@@ -222,13 +265,15 @@
       "education": "BS Test"
     },
     {
-      "id": 117,
+      "id": "117",
       "name": "Test 1",
       "email": "test1@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -239,13 +284,15 @@
       "education": "BS 1"
     },
     {
-      "id": 118,
+      "id": "118",
       "name": "Test 2",
       "email": "test2@example.com",
       "phone": "+1-555-1111",
       "position": "Developer 1",
       "status": "pending",
-      "skills": ["Skill1"],
+      "skills": [
+        "Skill1"
+      ],
       "experience": 1,
       "rating": 3.5,
       "appliedDate": "2024-11-19",
@@ -256,13 +303,18 @@
       "education": "BS 1"
     },
     {
-      "id": 119,
+      "id": "119",
       "name": "Michael Chen",
       "email": "michael.chen@email.com",
       "phone": "+1-555-0119",
       "position": "Full Stack Developer",
       "status": "pending",
-      "skills": ["React", "Node.js", "PostgreSQL", "Docker"],
+      "skills": [
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Docker"
+      ],
       "experience": 5,
       "rating": 4.6,
       "appliedDate": "2024-12-01",
@@ -273,13 +325,18 @@
       "education": "MS Computer Science"
     },
     {
-      "id": 120,
+      "id": "120",
       "name": "Sarah Thompson",
       "email": "sarah.thompson@email.com",
       "phone": "+1-555-0120",
       "position": "Product Manager",
       "status": "approved",
-      "skills": ["Agile", "Scrum", "JIRA", "Product Strategy"],
+      "skills": [
+        "Agile",
+        "Scrum",
+        "JIRA",
+        "Product Strategy"
+      ],
       "experience": 7,
       "rating": 4.9,
       "appliedDate": "2024-11-28",
@@ -290,13 +347,18 @@
       "education": "MBA"
     },
     {
-      "id": 121,
+      "id": "121",
       "name": "Robert Martinez",
       "email": "robert.martinez@email.com",
       "phone": "+1-555-0121",
       "position": "Data Scientist",
       "status": "pending",
-      "skills": ["Python", "Machine Learning", "TensorFlow", "SQL"],
+      "skills": [
+        "Python",
+        "Machine Learning",
+        "TensorFlow",
+        "SQL"
+      ],
       "experience": 4,
       "rating": 4.4,
       "appliedDate": "2024-12-03",
@@ -307,13 +369,18 @@
       "education": "PhD Data Science"
     },
     {
-      "id": 122,
+      "id": "122",
       "name": "Amanda Lee",
       "email": "amanda.lee@email.com",
       "phone": "+1-555-0122",
       "position": "Frontend Developer",
       "status": "on-hold",
-      "skills": ["Vue.js", "TypeScript", "Tailwind CSS", "Jest"],
+      "skills": [
+        "Vue.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Jest"
+      ],
       "experience": 3,
       "rating": 4.1,
       "appliedDate": "2024-12-05",
@@ -324,7 +391,7 @@
       "education": "BS Software Engineering"
     },
     {
-      "id": 123,
+      "id": "123",
       "name": "James Wilson",
       "email": "james.wilson@email.com",
       "phone": "+1-555-0123",
@@ -346,13 +413,18 @@
       "education": "MS Cybersecurity"
     },
     {
-      "id": 124,
+      "id": "124",
       "name": "Jennifer Brown",
       "email": "jennifer.brown@email.com",
       "phone": "+1-555-0124",
       "position": "Mobile Developer",
       "status": "pending",
-      "skills": ["React Native", "Swift", "Kotlin", "Firebase"],
+      "skills": [
+        "React Native",
+        "Swift",
+        "Kotlin",
+        "Firebase"
+      ],
       "experience": 4,
       "rating": 4.3,
       "appliedDate": "2024-12-06",
@@ -363,15 +435,19 @@
       "education": "BS Computer Engineering"
     },
     {
-      "id": 125,
+      "id": "125",
       "name": "Daniel Garcia",
       "email": "daniel.garcia@email.com",
       "phone": "+1-555-0125",
       "position": "Backend Developer",
       "status": "rejected",
-      "skills": ["Java", "Spring Boot", "MySQL"],
+      "skills": [
+        "Java",
+        "Spring Boot",
+        "MySQL"
+      ],
       "experience": 2,
-      "rating": 3.0,
+      "rating": 3,
       "appliedDate": "2024-12-04",
       "interviewDate": "2024-12-08",
       "notes": "Technical skills below requirements for the position",
@@ -380,13 +456,18 @@
       "education": "BS Computer Science"
     },
     {
-      "id": 126,
+      "id": "126",
       "name": "Lisa Anderson",
       "email": "lisa.anderson@email.com",
       "phone": "+1-555-0126",
       "position": "QA Engineer",
       "status": "approved",
-      "skills": ["Selenium", "Cypress", "Jest", "Test Automation"],
+      "skills": [
+        "Selenium",
+        "Cypress",
+        "Jest",
+        "Test Automation"
+      ],
       "experience": 5,
       "rating": 4.7,
       "appliedDate": "2024-11-30",
@@ -397,13 +478,19 @@
       "education": "BS Information Systems"
     },
     {
-      "id": 127,
+      "id": "127",
       "name": "Kevin Taylor",
       "email": "kevin.taylor@email.com",
       "phone": "+1-555-0127",
       "position": "Cloud Architect",
       "status": "pending",
-      "skills": ["AWS", "Azure", "GCP", "Terraform", "Kubernetes"],
+      "skills": [
+        "AWS",
+        "Azure",
+        "GCP",
+        "Terraform",
+        "Kubernetes"
+      ],
       "experience": 9,
       "rating": 4.9,
       "appliedDate": "2024-12-02",
@@ -414,15 +501,20 @@
       "education": "MS Cloud Computing"
     },
     {
-      "id": 128,
+      "id": "128",
       "name": "Michelle White",
       "email": "michelle.white@email.com",
       "phone": "+1-555-0128",
       "position": "UX Researcher",
       "status": "on-hold",
-      "skills": ["User Research", "Figma", "Data Analysis", "A/B Testing"],
+      "skills": [
+        "User Research",
+        "Figma",
+        "Data Analysis",
+        "A/B Testing"
+      ],
       "experience": 3,
-      "rating": 4.0,
+      "rating": 4,
       "appliedDate": "2024-12-07",
       "interviewDate": null,
       "notes": "Good portfolio, awaiting budget approval",
@@ -431,7 +523,7 @@
       "education": "MA Human-Computer Interaction"
     },
     {
-      "id": 129,
+      "id": "129",
       "name": "Christopher Moore",
       "email": "christopher.moore@email.com",
       "phone": "+1-555-0129",
@@ -454,13 +546,18 @@
       "education": "BS Database Management"
     },
     {
-      "id": 130,
+      "id": "130",
       "name": "Angela Martinez",
       "email": "angela.martinez@email.com",
       "phone": "+1-555-0130",
       "position": "Scrum Master",
       "status": "approved",
-      "skills": ["Agile", "Scrum", "Team Leadership", "Conflict Resolution"],
+      "skills": [
+        "Agile",
+        "Scrum",
+        "Team Leadership",
+        "Conflict Resolution"
+      ],
       "experience": 5,
       "rating": 4.6,
       "appliedDate": "2024-11-29",
@@ -471,7 +568,7 @@
       "education": "BS Business Administration"
     },
     {
-      "id": 131,
+      "id": "131",
       "name": "Brian Jackson",
       "email": "brian.jackson@email.com",
       "phone": "+1-555-0131",
@@ -494,7 +591,7 @@
       "education": "PhD Artificial Intelligence"
     },
     {
-      "id": 132,
+      "id": "132",
       "name": "Rachel Green",
       "email": "rachel.green@email.com",
       "phone": "+1-555-0132",
@@ -516,7 +613,7 @@
       "education": "BA Technical Communication"
     },
     {
-      "id": 133,
+      "id": "133",
       "name": "Steven Harris",
       "email": "steven.harris@email.com",
       "phone": "+1-555-0133",
@@ -537,6 +634,28 @@
       "yearlySalary": 112000,
       "location": "San Francisco, CA",
       "education": "BS Systems Engineering"
+    },
+    {
+      "id": "1766152476246",
+      "name": "GeorgeKolonas",
+      "email": "georgekolonas23@gmail.com",
+      "phone": "+306948720413",
+      "position": "Full Stack Developer",
+      "status": "pending",
+      "skills": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Node.js"
+      ],
+      "experience": 2,
+      "rating": 5,
+      "appliedDate": "2025-12-19",
+      "interviewDate": null,
+      "notes": "-",
+      "yearlySalary": 3000,
+      "location": "Larissa , Thessally",
+      "education": "BS Computer Science"
     }
   ]
 }

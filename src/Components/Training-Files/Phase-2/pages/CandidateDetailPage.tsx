@@ -65,18 +65,10 @@ export const CandidateDetailPage: React.FC = () => {
   // Structure same as EditCandidatePage
   // Your not found check here
 
-  if (loading) {
-    return (
-      <div className="form-wrapper column-center">
-        <p>Loading candidate details...</p>
-      </div>
-    );
-  }
-
   if (error || !candidate) {
     return (
       <div className="not-found-container">
-        <h2 className="error-title"> Candidate Not Found</h2>
+        <h2 className="error-title">Candidate Not Found</h2>
         <p className="error-text">
           The candidate you're looking for doesn't exist.
         </p>
@@ -84,12 +76,18 @@ export const CandidateDetailPage: React.FC = () => {
           onClick={() => navigate(candidate_route)}
           className="btn btn-primary"
         >
-          back to candidates
+          Back to Candidates
         </button>
       </div>
     );
   }
-
+  if (loading) {
+    return (
+      <div className="form-wrapper column-center">
+        <p>Loading candidate details...</p>
+      </div>
+    );
+  }
   // TODO 6: Create handleEdit function
   // HINT: Navigate to `/candidates/${candidate.id}/edit`
   const handleEdit = () => {
@@ -134,19 +132,6 @@ export const CandidateDetailPage: React.FC = () => {
       <div className="detail-section">
         <h2 className="section-title">Contact Information</h2>
         <div className="detail-grid">
-          {/* TODO 12: Add Email field with mailto link */}
-          {/* Structure:
-              <div>
-                <div className="detail-label">Email</div>
-                <div className="detail-value">
-                  <a href={`mailto:${candidate.email}`} className="detail-link">
-                    {candidate.email}
-                  </a>
-                </div>
-              </div>
-          */}
-          {/* Your contact fields here (email, phone, location) */}
-
           <div className="detail-label">Email</div>
           <div className="detail-value">
             <a href={`mailto:${candidate.email}`} className="detail-link">
@@ -261,12 +246,8 @@ export const CandidateDetailPage: React.FC = () => {
         {/* 3. Delete button (btn-danger) → handleDelete */}
         {/* Your buttons here */}
         <div className="detail-actions">
-          <button
-            className="btn btn-secondary"
-            aria-label="back to candidates"
-            onClick={handleBack}
-          >
-            back to candidates
+          <button className="btn btn-secondary" onClick={handleBack}>
+            Back to Candidates
           </button>
           <button className="btn btn-primary" onClick={handleEdit}>
             Edit
