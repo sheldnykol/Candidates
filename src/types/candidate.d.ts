@@ -1,7 +1,7 @@
 export type CandidateStatus = "pending" | "approved" | "rejected" | "on-hold";
 
 export interface Candidate {
-  id: number;
+  id: number | string;
   name: string;
   email: string;
   phone: string;

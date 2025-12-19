@@ -1,6 +1,8 @@
 import { useState, type ChangeEvent } from "react";
 
-export const useForm = <T extends Record<string, any>>(initialValues: T) => {
+export const useForm = <T extends Record<string, string | number | null>>(
+  initialValues: T
+) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
 
@@ -33,7 +35,7 @@ export const useForm = <T extends Record<string, any>>(initialValues: T) => {
     }));
   };
 
-  const setFieldValue = (field: keyof T, value: any) => {
+  const setFieldValue = (field: keyof T, value: T[keyof T]) => {
     setValues((prev) => ({
       ...prev,
       [field]: value,

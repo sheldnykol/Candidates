@@ -33,15 +33,8 @@ export const CandidateProvider: React.FC<{ children: ReactNode }> = ({
   const addCandidate = async (candidateData: Omit<Candidate, "id">) => {
     try {
       setError(null);
-      // TODO: Implement the createCandidate API call
-      // const newCandidate = await candidateApi.createCandidate(candidateData);
 
-      // Placeholder implementation until API is done
-      const newCandidate: Candidate = {
-        id: Date.now(), // Temporary ID
-        ...candidateData,
-      };
-
+      const newCandidate = await candidateApi.createCandidate(candidateData);
       setCandidates((prev) => [...prev, newCandidate]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to add candidate");
