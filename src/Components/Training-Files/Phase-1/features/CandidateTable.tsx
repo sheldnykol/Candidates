@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import type { Candidate } from "../../../../types/candidate";
 import { Pagination } from "../../../common/Pagination";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 interface CandidateTableProps {
   candidates: Candidate[];
@@ -9,29 +10,69 @@ interface CandidateTableProps {
   onView: (id: number | string) => void;
 }
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE_OPTIONS = [5, 10, 24, 50];
+
+const getSavedSize = () => {
+  const saved = localStorage.getItem("candidatePageSize");
+  const num = Number(saved);
+  return PAGE_SIZE_OPTIONS.includes(num) ? num : 10;
+};
 export const CandidateTable: React.FC<CandidateTableProps> = ({
   candidates,
-
   onEdit,
   onDelete,
   onView,
 }) => {
+  /// const [currentPage, setCurrentPage] = React.useState(1);
+
+  /// const totalPages = Math.ceil(candidates.length / PAGE_SIZE);
+
+  /// const startIndex = (currentPage - 1) * PAGE_SIZE;
+  /// const paginatedCandidates = candidates.slice(
+  ///   startIndex,
+  ///   startIndex + PAGE_SIZE
+  /// );
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [pageSize, setPageSize] = useState(getSavedSize());
   const [currentPage, setCurrentPage] = React.useState(1);
+  React.useEffect(() => {
+    localStorage.setItem("candidatePageSize", String(pageSize));
+    setCurrentPage(1);
+  }, [pageSize]);
 
-  const totalPages = Math.ceil(candidates.length / PAGE_SIZE);
+  React.useEffect(() => {
+    const pageFromUrl = searchParams.get("page");
+    if (pageFromUrl) {
+      const pageNum = parseInt(pageFromUrl, 10);
+      if (!isNaN(pageNum) && pageNum >= 1) {
+        setCurrentPage(pageNum);
+      }
+    }
+  }, [searchParams]);
 
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const totalPages = Math.ceil(candidates.length / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
   const paginatedCandidates = candidates.slice(
     startIndex,
-    startIndex + PAGE_SIZE
+    startIndex + pageSize
   );
-
+  /// const handlePageChange = (page: number) => {
+  ///   // Your code here
+  // /  setCurrentPage(page);
+  /// };
   const handlePageChange = (page: number) => {
-    // Your code here
     setCurrentPage(page);
-  };
+    // allazw to url
+    const newParams = new URLSearchParams(searchParams);
+    if (page === 1) {
+      newParams.delete("page");
+    } else {
+      newParams.set("page", page.toString());
+    }
 
+    navigate(`?${newParams.toString()}`, { replace: true });
+  };
   const getStatusClass = (status: string) => {
     switch (status) {
       case "approved":
@@ -53,9 +94,27 @@ export const CandidateTable: React.FC<CandidateTableProps> = ({
 
   return (
     <>
+      <div className="table-controls">
+        <div className="items-per-page">
+          <span>Show </span>
+          <select
+            value={pageSize}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+            className="select-input"
+          >
+            {PAGE_SIZE_OPTIONS.map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+          <span> entries per page</span>
+        </div>
+      </div>
+      <br />
       <div className="table-container">
         <table className="candidate-table">
-          <thead>
+          <thead className="thead">
             <tr style={{ textAlignLast: "center" }}>
               <th>Name</th>
               <th>Email</th>

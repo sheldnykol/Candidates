@@ -6,7 +6,7 @@
 }
 
 .layout-header {
-  background: #2c3e50;
+  background-color: var(--bg-nav);
   color: white;
   padding: 1rem 1rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -18,9 +18,9 @@
 }
 
 .layout-nav {
-  background: #34495e;
+  background: var(--bg-nav);
   padding: 0.8rem 2rem;
-  border-bottom: 1px solid #2c3e50;
+  border-bottom: 1px solid var(--bg-nav);
 }
 
 .layout-nav-links {
@@ -43,11 +43,11 @@
 .layout-main {
   flex: 1;
   padding: 2rem;
-  background: #ecf0f1;
+  background: var(--main-layout);
 }
 
 .layout-footer {
-  background: #2c3e50;
+  background-color: var(--bg-nav);
   color: white;
   padding: 1rem 2rem;
   text-align: center;
@@ -55,4 +55,8 @@
 
 .layout-footer p {
   margin: 0;
+}
+
+.thead {
+  background: var(--bg-nav)!important;
 }

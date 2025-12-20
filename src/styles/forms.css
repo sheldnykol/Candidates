@@ -1,9 +1,9 @@
 /* Form Styles */
 .form-container {
-  background: white;
+  background: var(--bg-content);
   padding: 2rem;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow);
   max-width: 800px;
   width: 100%;
 }
@@ -38,7 +38,7 @@
 .form-select,
 .form-textarea {
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border);
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
@@ -48,8 +48,8 @@
 .form-select:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  border-color: var(--input-border);
+  box-shadow: 0 0 0 3px var(--shadow);
 }
 
 .form-textarea {

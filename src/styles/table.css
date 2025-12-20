@@ -6,15 +6,15 @@
 .candidate-table {
   width: 100%;
   border-collapse: collapse;
-  background: white;
+  background: var(--bg-content);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px var(--shadow);
 }
 
 .candidate-table th {
-  background: #34495e;
-  color: white;
+  background: var(--table-header-bg);
+  color: var(--table-header-text);
   padding: 1rem;
   text-align: left;
   font-weight: bold;
@@ -22,7 +22,7 @@
 
 .candidate-table td {
   padding: 1rem;
-  border-bottom: 1px solid #ecf0f1;
+  border-bottom: 1px solid var(--border-table);
 }
 
 .candidate-table tr {
@@ -38,7 +38,7 @@
 }
 
 .status-approved {
-  background: #27ae60;
+  background: var(--btn-success)
 }
 
 .status-pending {
@@ -46,11 +46,11 @@
 }
 
 .status-rejected {
-  background: #e74c3c;
+  background: var(--btn-danger)
 }
 
 .status-on-hold {
-  background: #95a5a6;
+  background: var(--btn-secondary)
 }
 
 .empty-state {

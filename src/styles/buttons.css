@@ -13,22 +13,22 @@
 }
 
 .btn-primary {
-  background: #3498db;
+  background: var(--btn-primary);
   color: white;
 }
 
 .btn-success {
-  background: #27ae60;
+  background: var(--btn-success);
   color: white;
 }
 
 .btn-danger {
-  background: #e74c3c;
+  background: var(--btn-danger);
   color: white;
 }
 
 .btn-secondary {
-  background: #95a5a6;
+  background: var(--btn-secondary);;
   color: white;
 }
 

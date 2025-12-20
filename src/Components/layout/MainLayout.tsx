@@ -1,11 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTheme } from "../../hooks/useTheme";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+  const { theme, toggleTheme } = useTheme();
   return (
     <div className="layout-container">
       <header className="layout-header">
@@ -23,6 +25,9 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           <Link to="/add" className="nav-link">
             Add Candidate
           </Link>
+          <button onClick={toggleTheme} className="theme-toggle">
+            {theme === "light" ? "🌙" : "☀️"}
+          </button>
         </div>
       </nav>
 

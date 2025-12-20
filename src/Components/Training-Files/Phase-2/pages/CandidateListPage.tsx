@@ -54,6 +54,55 @@ export const CandidateListPage: React.FC = () => {
   const handleView = (id: number | string) => {
     navigate(`/candidates/${id}`);
   };
+  const exportToCSV = () => {
+    const headers = [
+      "Name",
+      "Email",
+      "Phone",
+      "Position",
+      "Status",
+      "Skills",
+      "Experience",
+      "Rating",
+      "Applied Date",
+      "Interview Date",
+      "Yearly Salary",
+      "Location",
+      "Education",
+      "Notes",
+    ];
+
+    const rows = candidates.map((c) => [
+      c.name,
+      c.email,
+      c.phone,
+      c.position,
+      c.status,
+      c.skills.join("; "),
+      c.experience,
+      c.rating,
+      c.appliedDate,
+      c.interviewDate || "",
+      c.yearlySalary,
+      c.location,
+      c.education,
+      c.notes,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `candidates_${new Date().toISOString().split("T")[0]}.csv`;
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div>
@@ -62,10 +111,14 @@ export const CandidateListPage: React.FC = () => {
           Candidates
           <span className="text-muted font-30">{` (${filteredCandidates.length})`}</span>
         </h1>
-
-        <button className="btn btn-success" onClick={() => navigate("/add")}>
-          Add Candidate
-        </button>
+        <div>
+          <button className="btn btn-success" onClick={() => navigate("/add")}>
+            Add Candidate
+          </button>
+          <button onClick={exportToCSV} className="btn btn-primary">
+            Export to CSV
+          </button>
+        </div>
       </div>
 
       <div className="list-filters">

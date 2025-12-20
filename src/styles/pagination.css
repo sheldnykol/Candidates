@@ -13,7 +13,8 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   cursor: pointer;
-  background: white;
+  background: var(--bg-nav);
+  color: white
 }
 
 .pagination-btn:disabled {
@@ -22,9 +23,10 @@
 }
 
 .pagination-btn-active {
-  background: #3498db;
+  background: var(--bg-nav);
   color: white;
   font-weight: bold;
+  font-size: larger;
 }
 
 .pagination-ellipsis {

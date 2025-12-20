@@ -8,7 +8,7 @@
 
 .list-header h1 {
   margin: 0;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .list-controls {
@@ -47,3 +47,4 @@
   color: #7f8c8d;
   padding: 0.6rem;
 }
+
