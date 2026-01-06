@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = true
+	symlinks = false
+	ignorecase = true
+[remote "origin"]
+	url = https://github.com/React-2-Week-Bootcamp/react-school-project-days-8-10-sheldnykol
+	tagOpt = --no-tags
+	fetch = +refs/*:refs/*
+	mirror = true

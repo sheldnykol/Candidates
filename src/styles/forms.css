@@ -73,3 +73,22 @@
   width: 100%;
   margin: 1rem 0;
 }
+
+@media (max-width: 767px) {
+  .form-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-actions {
+    flex-direction: column; 
+    gap: 0.5rem;
+  }
+
+  .btn {
+    width: 100%; 
+  }
+}

@@ -562,3 +562,19 @@
 .font-30 {
   font-size: 30px;
 }
+
+@media (max-width: 767px) {
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .list-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  .list-header .btn {
+    width: 100%;
+    text-align: center;
+  }
+}

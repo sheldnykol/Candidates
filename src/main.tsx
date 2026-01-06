@@ -15,6 +15,7 @@ import "./styles/detail.css";
 import "./styles/forms.css";
 import "./styles/error.css";
 import "./styles/utilities.css";
+import "./styles/responsive.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

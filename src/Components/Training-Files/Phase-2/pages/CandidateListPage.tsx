@@ -111,6 +111,7 @@ export const CandidateListPage: React.FC = () => {
           Candidates
           <span className="text-muted font-30">{` (${filteredCandidates.length})`}</span>
         </h1>
+        <br></br>
         <div>
           <button className="btn btn-success" onClick={() => navigate("/add")}>
             Add Candidate

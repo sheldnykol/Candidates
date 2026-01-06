@@ -60,3 +60,19 @@
   text-align: center;
   color: #95a5a6;
 }
+
+@media (max-width: 767px) {
+  .table-container {
+    overflow-x: auto; 
+  }
+
+  .candidate-table th, .candidate-table td {
+    padding: 0.5rem; 
+    white-space: nowrap; 
+  }
+
+  .candidate-table th:nth-child(4), 
+  .candidate-table td:nth-child(4) {
+    display: none;
+  }
+}

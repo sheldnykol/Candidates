@@ -64,3 +64,13 @@
   width: 100%;
   width: -webkit-fill-available;
 }
+
+@media (max-width: 767px) {
+  .flex {
+    flex-direction: column; /* Stack flex items where needed */
+  }
+
+  .column-center, .column-left {
+    align-items: center; /* Center on mobile */
+  }
+}

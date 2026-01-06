@@ -11,11 +11,12 @@ interface CandidateTableProps {
 }
 
 const PAGE_SIZE_OPTIONS = [5, 10, 24, 50];
+const PAGE_SIZE = 5;
 
 const getSavedSize = () => {
   const saved = localStorage.getItem("candidatePageSize");
   const num = Number(saved);
-  return PAGE_SIZE_OPTIONS.includes(num) ? num : 10;
+  return PAGE_SIZE_OPTIONS.includes(num) ? num : PAGE_SIZE;
 };
 export const CandidateTable: React.FC<CandidateTableProps> = ({
   candidates,

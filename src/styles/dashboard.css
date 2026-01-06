@@ -72,3 +72,18 @@
   justify-content: flex-start;
   align-items: center;
 }
+
+@media (max-width: 767px) {
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr; 
+    gap: 1rem;
+  }
+
+  .dashboard-details-grid {
+    grid-template-columns: 1fr; 
+  }
+
+  .stat-card {
+    padding: 1rem; 
+  }
+}

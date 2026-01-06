@@ -34,3 +34,15 @@
   color: #7f8c8d;
   user-select: none;
 }
+
+@media (max-width: 767px) {
+  .pagination {
+    flex-wrap: wrap; 
+    justify-content: center;
+  }
+
+  .pagination-btn {
+    padding: 0.4rem 0.8rem; 
+    margin: 0.2rem;
+  }
+}
